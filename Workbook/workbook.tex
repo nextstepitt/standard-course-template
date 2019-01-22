@@ -1,0 +1,73 @@
+% workbook.text
+% Copyright © 2018-2019 NextStep IT Training, a division of Smallrock Internet Services, Inc. All rights reserved.
+%
+% This is the main workbook file. It reads the preamble from workbook=def, sets up the headers and footers,
+% starts the document and creates the cover page, and then spins the contents of the workbook-chapters file.
+%
+
+\providecommand{\main}{.} % from https://tex.stackexchange.com/questions/289450/path-of-figures-in-different-directories-with-subfile-latex
+\documentclass[twoside, openright, titlepage]{book}
+\usepackage{eso-pic}
+\usepackage[left=2.5cm, right=2.5cm, top=2.5cm, bottom=1.75cm]{geometry}
+\usepackage{graphics}
+\usepackage{subfiles}
+\graphicspath{{\main/_Images/}}
+
+% Preamble.
+
+\input{\main/_Preamble/workbook-def}
+
+% Page headers and footers.
+% Renewing the rightmark from section and subsection must take place after the header and footer are cleared,
+% or only the subsection will catch. The default for the subsection is "empty," which is why that happens.
+%
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\sectionmark}[1]{\markright{#1}}
+\renewcommand{\subsectionmark}[1]{\markright{#1}}
+\fancyhead[LE]{\thepage\hspace{2em}\textsc{\nouppercase{\leftmark}}}
+\fancyhead[RO]{\textsc{\nouppercase{\rightmark}}\hspace{2em}\thepage}
+
+% Run the document.
+
+\begin{document}
+
+    % Define the cover page and title.
+
+    \pagenumbering{roman}
+    \AddToShipoutPicture*{\CoverPic}
+    \makecovertitle{[Book Title]}{[sub-title if any]}{[book number]}
+
+    % Front matter (adjust which files are included as necessary)
+
+    \subfile{00_Front-Matter/copyright}
+    \subfile{00_Front-Matter/foreword}
+    \subfile{00_Front-Matter/introduction}
+    \subfile{00_Front-Matter/preface}
+
+    \subfile{00_Front-Matter/prelude}
+
+    % Table of contents.
+
+    \newpage
+        \pagenumbering{roman}
+        \tableofcontents
+        \thispagestyle{empty}
+    \newpage
+
+    % Make sure that we start on the right side, and that the page numbering is in Arabic.
+
+    \cleardoublepage
+    \pagenumbering{arabic}
+
+    % Chapter content.
+
+    \input{./workbook-chapters}
+
+    % Include the instructor notes at the end of the book.
+
+    \subfile{00_Front-Matter/instructor-notes}
+
+\end{document}

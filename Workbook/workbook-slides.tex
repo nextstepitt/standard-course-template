@@ -1,0 +1,80 @@
+% workbook-slides.text
+% Copyright © 2018-2019 NextStep IT Training, a division of Smallrock Internet Services, Inc. All rights reserved.
+%
+% This mirrors the main workbook file but sets up the pages in 16:9 HD format, in landscape mode. It still reads
+% the preamble from workbook=def, sets up the headers and footers,
+% starts the document and creates the cover page, and then spins the contents of the workbook-chapters file.
+%
+
+\providecommand{\main}{.} % from https://tex.stackexchange.com/questions/289450/path-of-figures-in-different-directories-with-subfile-latex
+\documentclass[oneside, 14pt]{report}
+\usepackage{eso-pic}
+\usepackage{etoolbox}
+\usepackage{extsizes}
+\usepackage[paperheight=6.1875in, paperwidth=11in, inner=4.0cm, left=4.0cm, right=1.5cm, top=1.75cm, bottom=1.5cm]{geometry}
+\usepackage{graphics}
+\usepackage{subfiles}
+\graphicspath{{\main/_Images/}}
+
+% Preamble.
+
+\input{\main/_Preamble/workbook-def}
+
+% Up the section and subsection font size to large at the top of the slides.
+
+\titleformat*{\chapter}{\Large\bfseries\raggedleft}
+\titleformat*{\section}{\Large\bfseries}
+\titleformat*{\subsection}{\Large\bfseries}
+
+% Set the figure size to a smaller portion relative to the width of the page (50%).
+
+\renewcommand{\figuresize}{0.5}
+
+% Page headers and footers.
+% Renewing the rightmark from section and subsection must take place after the header and footer are cleared,
+% or only the subsection will catch. The default for the subsection is "empty," which is why that happens.
+%
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[L]{\fontsize{8}{10}\textsc{\nouppercase{NS00000 [Set Book Number and Title]}}}
+\fancyfoot[R]{\fontsize{8}{10}\textsc{\nouppercase{Copyright © 2018-2019 NextStep IT Training. All rights reserved.}}}
+\patchcmd{\chapter}{\thispagestyle{plain}}{\thispagestyle{fancy}}{}{}
+
+% Fix the sub-sections so that they clear to a new page (in the workbook they don't).
+
+\titlespacing*{\chapter}{0pt}{0pt}{0pt}
+\renewcommand{\subsectionbreak}{\clearpage}
+
+% Command to create
+
+% Run the document.
+
+\begin{document}
+
+    % Set up the slide-deck cover.
+
+    \pagenumbering{roman}
+    \AddToShipoutPictureBG{\BackgroundPic}
+    \makecovertitle{[Book Title]}{[sub-title if any]}{[book number]}
+
+    % Skip most of the front matter, just add the prelude before the table of contents.
+
+    \subfile{00_Front-Matter/prelude}
+
+    % Table of contents.
+
+    \newpage
+        \pagenumbering{roman}
+        \tableofcontents
+        \thispagestyle{fancy}
+    \newpage
+
+    % Reset the page numbering to Arabic and include the chapter content.
+
+    \pagenumbering{arabic}
+    \input{./workbook-chapters}
+    
+\end{document}

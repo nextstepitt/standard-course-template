@@ -1,0 +1,536 @@
+% workbook-def.text
+% Copyright © 2018-2019 NextStep IT Training, a division of Smallrock Internet Services, Inc. All rights reserved.
+%
+% This file contains the definitions for building course material in LaTeX.
+%
+
+\usepackage[export]{adjustbox}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage{lstlinebgrd}
+\usepackage{makeidx}
+\usepackage{mdframed}
+\usepackage{scrextend}
+\usepackage{tabularx}
+\usepackage{textcomp}
+\usepackage{titlesec}
+\usepackage{xcolor}
+
+%% General global settings.
+
+\hbadness=99999            % Get some of the horizontal stuff that overflows the page width and wraps to shut up.
+
+\pagenumbering{arabic}     % Turn the page number to Arabic (decimal).
+
+\makeindex                 % Allow for index declarations.
+
+\raggedbottom              % Prevent vertical distribution of items on the pages.
+
+\renewcommand{\familydefault}{\sfdefault} % Define the default font for the book.
+
+% Define where page breaks happen in relationship to sections; subsections are changed for slides in workbook-slides.tex.
+
+\newcommand{\sectionbreak}{\clearpage}
+\newcommand{\subsectionbreak}{}
+
+\setlength\parindent{0pt}  % Remove paragraph indentations.
+
+\restylefloat{table}       % Tables shouldn't float, they should stay in place.
+
+\definecolor{codeblock}{RGB}{238, 238, 238}
+\definecolor{codeblockbar}{RGB}{102, 153, 204}
+
+\newlength{\tablewidth}    % General length used to calculate table width
+\setlength{\tablewidth}{\textwidth minus 5pt}
+
+
+%% Cover Page
+%% This is used to create the background picture for the book cover page.
+
+\newcommand{\CoverPic}{%
+\put(0,0){%
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill
+\centering
+\includegraphics[width=\paperwidth, height=\paperheight, keepaspectratio]{\coverimage}%
+\vfill
+}}}
+
+\newcommand{\BackgroundPic}{%
+\put(0,0){%
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill
+\centering
+\includegraphics[width=\paperwidth, height=\paperheight, keepaspectratio]{slide-background.jpg}%
+\vfill
+}}}
+
+% Define the command to place the title on the cover page.
+
+\newlength{\coverpagetitletopoffset}
+\newcommand{\coverimage}{}
+
+\ifnum \paperwidth>\paperheight
+    \renewcommand{\coverimage}{slide-cover.png}
+    \setlength{\coverpagetitletopoffset}{4cm}
+\else
+    \renewcommand{\coverimage}{workbook-cover.png}
+    \setlength{\coverpagetitletopoffset}{10cm}
+\fi
+
+\newcommand{\makecovertitle}[3]{
+    \begin{titlepage}
+        \parbox{\textwidth}{
+            \vspace{\coverpagetitletopoffset}
+            \hspace*{\fill}\Huge\textbf{#1}
+            \\{}\\\hspace*{\fill}\LARGE\textbf{#2}
+            \\{}\\\hspace*{\fill}\large\textbf{#3}
+        }
+    \end{titlepage}
+}
+
+%% Chapter and section titles.
+
+\titleformat{\chapter}[display]{\raggedleft\huge\bfseries\scshape\rmfamily}
+{\chaptertitlename\ \thechapter}{0pt}{}
+
+\titlespacing*{\subsection}{0pt}{7ex}{3ex}
+
+%% Chapter Page Titles
+
+\newcommand{\chapterobjectives}{\large{\textbf{Objectives}}\normalsize}
+\newcommand{\chapteroverview}{\large{\textbf{Overview}}\normalsize\vspace{1em}}
+
+%% Topics
+%% Define new environments for the chapter and section topics, and the definition of a topic and a selected topic.
+
+\newenvironment{chaptertopics}
+    {%
+        \begin{flushright}
+    }
+    {%
+        \end{flushright}
+    }
+
+\newenvironment{sectiontopics}
+    {%
+        \begin{addmargin}{2em}
+    }
+    {%
+        \end{addmargin}
+    }
+
+\newcommand{\topic}[1]{#1 \\}
+\newcommand{\topicselected}[1]{\textbf{#1} \\}
+
+%% Figures.
+
+\newcommand{\figuresize}{0.9}
+\newcommand{\fig}[1]{\begin{center}\includegraphics[width=\figuresize\textwidth]{#1}\end{center}}
+
+% This defines an odd-ball note that could be placed at the lower right of a figure.
+
+\newenvironment{displaynote}
+    {%
+        \begin{flushright}
+        \footnotesize
+    }
+    {%
+        \end{flushright}
+    }
+
+%% Tables.
+
+% Tables are just LaTeX tables, this is an example of what the topictable macros below actually produce:
+% \begin{table}[H]
+% \resizebox{\tablewidth}{!}{
+% \hspace*{10pt}\begin{minipage}{\textwidth}
+% \def\arraystretch{1.5}
+% \begin{tabularx}{\textwidth}{|l|X|}
+% \hline
+% \textbf{Header Column One} & \textbf{Header Column Two}\\
+% \hline
+% Row one, column one & Row one, column two\\
+% \hline
+% Row two, column one & Row two, column two\\
+% \hline
+% \end{tabularx}
+% \end{minipage}
+% }
+% \end{table}
+
+\makeatletter
+
+\newcommand{\topictable}[2]
+    {%
+    \begin{table}[H]
+        \resizebox{\tablewidth}{!}{
+        \hspace*{10pt}\begin{minipage}{\textwidth}
+        \def\arraystretch{1.5}
+        \begin{tabularx}{\textwidth}{#1}
+        #2
+        \hline
+        \end{tabularx}
+        \end{minipage}
+        }
+    \end{table}
+    }
+
+\newcommand{\donextheadercolumn}[1]{ & \textbf{#1}\@ifnextchar\bgroup{\donextheadercolumn}{ \\ }}
+\newcommand{\chknextheadercolumn}{\@ifnextchar\bgroup{\donextheadercolumn}{ \\ }}
+\newcommand{\tableheader}[1]{\hline\textbf{#1}\chknextheadercolumn}
+
+\newcommand{\donextcolumn}[1]{ & #1\@ifnextchar\bgroup{\donextcolumn}{ \\ }}
+\newcommand{\chknextcolumn}{\@ifnextchar\bgroup{\donextcolumn}{ \\ }}
+\newcommand\tablerow[1]{\hline#1\chknextcolumn}
+
+\makeatother
+
+%% Code Blocks.
+
+\newmdenv[ leftmargin=15pt, skipbelow=0, linewidth=3pt, backgroundcolor=codeblock, linecolor=coldeblockbar, topline=false, rightline=false, bottomline=false, innerleftmargin=5pt, innerrightmargin=5pt, innertopmargin=0, innerbottommargin=0 ]{codebox}
+\lstset{ frame=none, xleftmargin=0pt, xrightmargin=0pt, basicstyle=\small }
+
+\lstnewenvironment{codeblock}[1]
+    {%
+        \mdframed[usetwoside=false, leftmargin=15pt, skipbelow=0, linewidth=3pt, backgroundcolor=codeblock, linecolor=codeblockbar, topline=false, rightline=false, bottomline=false, innerleftmargin=5pt, innerrightmargin=5pt, innertopmargin=0.5em, innerbottommargin=0]
+        \lstset{ language=#1, frame=none, xleftmargin=0pt, xrightmargin=0pt, basicstyle=\small, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}, showstringspaces=false }%
+    }
+    {%
+        \endmdframed
+    }
+
+
+%% Languages.
+
+% Define listing languages not defined by the lstlistings package. Language names are always lower-case.
+%
+% keywords[1] is used for language syntax. Keywords[2] is used for primitive and built-in data types
+% and pre-defined variables and values. Keywords[3] is for built-in functions.
+%
+
+\lstdefinelanguage{javascript}{
+    keywords=[1]{break, case, catch, class, const, continue, debugger, default, delete, do, else, export, extends, finally, for, function, if, import, in, instanceof, let, new, of, return, static, switch, throw, try, typeof, var, while, var},
+    keywordstyle=[1]\color{blue}\bfseries,
+    keywords=[2]{Array, boolean, Date, false, implements, import, NaN, Math, null, super, this, true, undefined},
+    keywordstyle=[2]\color{darkgray}\bfseries,
+    keywords=[3]{isNaN, parseInt, parseFloat},
+    keywordstyle=[3]\color{darkgray}\bfseries,
+    identifierstyle=\color{black},
+    sensitive=false,
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    commentstyle=\color{purple}\ttfamily,
+    stringstyle=\color{red}\ttfamily,
+    morestring=[b]',
+    morestring=[b]"
+}
+
+\lstdefinelanguage{jsx}{
+    keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, var, let, const, class},
+    keywordstyle=\color{blue}\bfseries,
+    ndkeywords={class, export, boolean, throw, implements, import, this},
+    ndkeywordstyle=\color{darkgray}\bfseries,
+    identifierstyle=\color{black},
+    sensitive=false,
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    commentstyle=\color{purple}\ttfamily,
+    stringstyle=\color{red}\ttfamily,
+    morestring=[b]',
+    morestring=[b]"
+}
+
+% define listing language json
+
+\lstdefinelanguage{json}{
+    keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, var, let, const},
+    keywordstyle=\color{blue}\bfseries,
+    ndkeywords={class, export, boolean, throw, implements, import, this},
+    ndkeywordstyle=\color{darkgray}\bfseries,
+    identifierstyle=\color{black},
+    sensitive=false,
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    commentstyle=\color{purple}\ttfamily,
+    stringstyle=\color{red}\ttfamily,
+    morestring=[b]',
+    morestring=[b]"
+}
+
+% define listing language TypeScript and TSX
+
+\lstdefinelanguage{typescript}{
+    keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, var, let, const},
+    keywordstyle=\color{blue}\bfseries,
+    ndkeywords={class, interface, enum, export, boolean, throw, implements, import, this},
+    ndkeywordstyle=\color{darkgray}\bfseries,
+    identifierstyle=\color{black},
+    sensitive=false,
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    commentstyle=\color{purple}\ttfamily,
+    stringstyle=\color{red}\ttfamily,
+    morestring=[b]',
+    morestring=[b]"
+}
+
+\lstdefinelanguage{tsx}{
+    keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, var, let, const},
+    keywordstyle=\color{blue}\bfseries,
+    ndkeywords={class, interface, enum, export, boolean, throw, implements, import, this},
+    ndkeywordstyle=\color{darkgray}\bfseries,
+    identifierstyle=\color{black},
+    sensitive=false,
+    comment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    commentstyle=\color{purple}\ttfamily,
+    stringstyle=\color{red}\ttfamily,
+    morestring=[b]',
+    morestring=[b]" 
+}
+
+\lstdefinelanguage{html5}{
+    language=html,
+    sensitive=true, 
+    alsoletter={<>=-},
+    otherkeywords={
+    % HTML tags
+    <, </, >,
+    </a, <a, </a>,
+    </abbr, <abbr, </abbr>,
+    </address, <address, </address>,
+    </area, <area, </area>,
+    </area, <area, </area>,
+    </article, <article, </article>,
+    </aside, <aside, </aside>,
+    </audio, <audio, </audio>,
+    </audio, <audio, </audio>,
+    </b, <b, </b>,
+    </base, <base, </base>,
+    </bdi, <bdi, </bdi>,
+    </bdo, <bdo, </bdo>,
+    </blockquote, <blockquote, </blockquote>,
+    </body, <body, </body>,
+    </br, <br, </br>,
+    </button, <button, </button>,
+    </canvas, <canvas, </canvas>,
+    </caption, <caption, </caption>,
+    </cite, <cite, </cite>,
+    </code, <code, </code>,
+    </col, <col, </col>,
+    </colgroup, <colgroup, </colgroup>,
+    </data, <data, </data>,
+    </datalist, <datalist, </datalist>,
+    </dd, <dd, </dd>,
+    </del, <del, </del>,
+    </details, <details, </details>,
+    </dfn, <dfn, </dfn>,
+    </div, <div, </div>,
+    </dl, <dl, </dl>,
+    </dt, <dt, </dt>,
+    </em, <em, </em>,
+    </embed, <embed, </embed>,
+    </fieldset, <fieldset, </fieldset>,
+    </figcaption, <figcaption, </figcaption>,
+    </figure, <figure, </figure>,
+    </footer, <footer, </footer>,
+    </form, <form, </form>,
+    </h1, <h1, </h1>,
+    </h2, <h2, </h2>,
+    </h3, <h3, </h3>,
+    </h4, <h4, </h4>,
+    </h5, <h5, </h5>,
+    </h6, <h6, </h6>,
+    </head, <head, </head>,
+    </header, <header, </header>,
+    </hr, <hr, </hr>,
+    </html, <html, </html>,
+    </i, <i, </i>,
+    </iframe, <iframe, </iframe>,
+    </img, <img, </img>,
+    </input, <input, </input>,
+    </ins, <ins, </ins>,
+    </kbd, <kbd, </kbd>,
+    </keygen, <keygen, </keygen>,
+    </label, <label, </label>,
+    </legend, <legend, </legend>,
+    </li, <li, </li>,
+    </link, <link, </link>,
+    </main, <main, </main>,
+    </map, <map, </map>,
+    </mark, <mark, </mark>,
+    </math, <math, </math>,
+    </menu, <menu, </menu>,
+    </menuitem, <menuitem, </menuitem>,
+    </meta, <meta, </meta>,
+    </meter, <meter, </meter>,
+    </nav, <nav, </nav>,
+    </noscript, <noscript, </noscript>,
+    </object, <object, </object>,
+    </ol, <ol, </ol>,
+    </optgroup, <optgroup, </optgroup>,
+    </option, <option, </option>,
+    </output, <output, </output>,
+    </p, <p, </p>,
+    </param, <param, </param>,
+    </pre, <pre, </pre>,
+    </progress, <progress, </progress>,
+    </q, <q, </q>,
+    </rp, <rp, </rp>,
+    </rt, <rt, </rt>,
+    </ruby, <ruby, </ruby>,
+    </s, <s, </s>,
+    </samp, <samp, </samp>,
+    </script, <script, </script>,
+    </section, <section, </section>,
+    </select, <select, </select>,
+    </small, <small, </small>,
+    </source, <source, </source>,
+    </span, <span, </span>,
+    </strong, <strong, </strong>,
+    </style, <style, </style>,
+    </summary, <summary, </summary>,
+    </sup, <sup, </sup>,
+    </svg, <svg, </svg>,
+    </table, <table, </table>,
+    </tbody, <tbody, </tbody>,
+    </td, <td, </td>,
+    </template, <template, </template>,
+    </textarea, <textarea, </textarea>,
+    </tfoot, <tfoot, </tfoot>,
+    </th, <th, </th>,
+    </thead, <thead, </thead>,
+    </time, <time, </time>,
+    </title, <title, </title>,
+    </tr, <tr, </tr>,
+    </track, <track, </track>,
+    </u, <u, </u>,
+    </ul, <ul, </ul>,
+    </var, <var, </var>,
+    </video, <video, </video>,
+    </wbr, <wbr, </wbr>,
+    />, <!
+    },  
+    ndkeywords={
+    % General
+    =,
+    % HTML attributes
+    accept=, accept-charset=, accesskey=, action=, align=, alt=, async=, autocomplete=, autofocus=, autoplay=, autosave=, bgcolor=, border=, buffered=, challenge=, charset=, checked=, cite=, class=, code=, codebase=, color=, cols=, colspan=, content=, contenteditable=, contextmenu=, controls=, coords=, data=, datetime=, default=, defer=, dir=, dirname=, disabled=, download=, draggable=, dropzone=, enctype=, for=, form=, formaction=, headers=, height=, hidden=, high=, href=, hreflang=, http-equiv=, icon=, id=, ismap=, itemprop=, keytype=, kind=, label=, lang=, language=, list=, loop=, low=, manifest=, max=, maxlength=, media=, method=, min=, multiple=, name=, novalidate=, open=, optimum=, pattern=, ping=, placeholder=, poster=, preload=, pubdate=, radiogroup=, readonly=, rel=, required=, reversed=, rows=, rowspan=, sandbox=, scope=, scoped=, seamless=, selected=, shape=, size=, sizes=, span=, spellcheck=, src=, srcdoc=, srclang=, start=, step=, style=, summary=, tabindex=, target=, title=, type=, usemap=, value=, width=, wrap=,
+    % CSS properties
+    accelerator:,azimuth:,background:,background-attachment:,
+    background-color:,background-image:,background-position:,
+    background-position-x:,background-position-y:,background-repeat:,
+    behavior:,border:,border-bottom:,border-bottom-color:,
+    border-bottom-style:,border-bottom-width:,border-collapse:,
+    border-color:,border-left:,border-left-color:,border-left-style:,
+    border-left-width:,border-right:,border-right-color:,
+    border-right-style:,border-right-width:,border-spacing:,
+    border-style:,border-top:,border-top-color:,border-top-style:,
+    border-top-width:,border-width:,bottom:,caption-side:,clear:,
+    clip:,color:,content:,counter-increment:,counter-reset:,cue:,
+    cue-after:,cue-before:,cursor:,direction:,display:,elevation:,
+    empty-cells:,filter:,float:,font:,font-family:,font-size:,
+    font-size-adjust:,font-stretch:,font-style:,font-variant:,
+    font-weight:,height:,ime-mode:,include-source:,
+    layer-background-color:,layer-background-image:,layout-flow:,
+    layout-grid:,layout-grid-char:,layout-grid-char-spacing:,
+    layout-grid-line:,layout-grid-mode:,layout-grid-type:,left:,
+    letter-spacing:,line-break:,line-height:,list-style:,
+    list-style-image:,list-style-position:,list-style-type:,margin:,
+    margin-bottom:,margin-left:,margin-right:,margin-top:,
+    marker-offset:,marks:,max-height:,max-width:,min-height:,
+    min-width:,transition-duration:,transition-property:,
+    transition-timing-function:,transform:,
+    -moz-transform:,-moz-binding:,-moz-border-radius:,
+    -moz-border-radius-topleft:,-moz-border-radius-topright:,
+    -moz-border-radius-bottomright:,-moz-border-radius-bottomleft:,
+    -moz-border-top-colors:,-moz-border-right-colors:,
+    -moz-border-bottom-colors:,-moz-border-left-colors:,-moz-opacity:,
+    -moz-outline:,-moz-outline-color:,-moz-outline-style:,
+    -moz-outline-width:,-moz-user-focus:,-moz-user-input:,
+    -moz-user-modify:,-moz-user-select:,orphans:,outline:,
+    outline-color:,outline-style:,outline-width:,overflow:,
+    overflow-X:,overflow-Y:,padding:,padding-bottom:,padding-left:,
+    padding-right:,padding-top:,page:,page-break-after:,
+    page-break-before:,page-break-inside:,pause:,pause-after:,
+    pause-before:,pitch:,pitch-range:,play-during:,position:,quotes:,
+    -replace:,richness:,right:,ruby-align:,ruby-overhang:,
+    ruby-position:,-set-link-source:,size:,speak:,speak-header:,
+    speak-numeral:,speak-punctuation:,speech-rate:,stress:,
+    scrollbar-arrow-color:,scrollbar-base-color:,
+    scrollbar-dark-shadow-color:,scrollbar-face-color:,
+    scrollbar-highlight-color:,scrollbar-shadow-color:,
+    scrollbar-3d-light-color:,scrollbar-track-color:,table-layout:,
+    text-align:,text-align-last:,text-decoration:,text-indent:,
+    text-justify:,text-overflow:,text-shadow:,text-transform:,
+    text-autospace:,text-kashida-space:,text-underline-position:,top:,
+    unicode-bidi:,-use-link-source:,vertical-align:,visibility:,
+    voice-family:,volume:,white-space:,widows:,width:,word-break:,
+    word-spacing:,word-wrap:,writing-mode:,z-index:,zoom:
+    },  
+    morecomment=[s]{<!--}{-->},
+    tag=[s]
+}
+
+\lstdefinelanguage{css}{
+    keywords={accelerator,azimuth,background,background-attachment,
+        background-color,background-image,background-position,
+        background-position-x,background-position-y,background-repeat,
+        behavior,border,border-bottom,border-bottom-color,
+        border-bottom-style,border-bottom-width,border-collapse,
+        border-color,border-left,border-left-color,border-left-style,
+        border-left-width,border-right,border-right-color,
+        border-right-style,border-right-width,border-spacing,
+        border-style,border-top,border-top-color,border-top-style,
+        border-top-width,border-width,bottom,caption-side,clear,
+        clip,color,content,counter-increment,counter-reset,cue,
+        cue-after,cue-before,cursor,direction,display,elevation,
+        empty-cells,filter,float,font,font-family,font-size,
+        font-size-adjust,font-stretch,font-style,font-variant,
+        font-weight,height,ime-mode,include-source,
+        layer-background-color,layer-background-image,layout-flow,
+        layout-grid,layout-grid-char,layout-grid-char-spacing,
+        layout-grid-line,layout-grid-mode,layout-grid-type,left,
+        letter-spacing,line-break,line-height,list-style,
+        list-style-image,list-style-position,list-style-type,margin,
+        margin-bottom,margin-left,margin-right,margin-top,
+        marker-offset,marks,max-height,max-width,min-height,
+        min-width,-moz-binding,-moz-border-radius,
+        -moz-border-radius-topleft,-moz-border-radius-topright,
+        -moz-border-radius-bottomright,-moz-border-radius-bottomleft,
+        -moz-border-top-colors,-moz-border-right-colors,
+        -moz-border-bottom-colors,-moz-border-left-colors,-moz-opacity,
+        -moz-outline,-moz-outline-color,-moz-outline-style,
+        -moz-outline-width,-moz-user-focus,-moz-user-input,
+        -moz-user-modify,-moz-user-select,orphans,outline,
+        outline-color,outline-style,outline-width,overflow,
+        overflow-X,overflow-Y,padding,padding-bottom,padding-left,
+        padding-right,padding-top,page,page-break-after,
+        page-break-before,page-break-inside,pause,pause-after,
+        pause-before,pitch,pitch-range,play-during,position,quotes,
+        -replace,richness,right,ruby-align,ruby-overhang,
+        ruby-position,-set-link-source,size,speak,speak-header,
+        speak-numeral,speak-punctuation,speech-rate,stress,
+        scrollbar-arrow-color,scrollbar-base-color,
+        scrollbar-dark-shadow-color,scrollbar-face-color,
+        scrollbar-highlight-color,scrollbar-shadow-color,
+        scrollbar-3d-light-color,scrollbar-track-color,table-layout,
+        text-align,text-align-last,text-decoration,text-indent,
+        text-justify,text-overflow,text-shadow,text-transform,
+        text-autospace,text-kashida-space,text-underline-position,top,
+        unicode-bidi,-use-link-source,vertical-align,visibility,
+        voice-family,volume,white-space,widows,width,word-break,
+        word-spacing,word-wrap,writing-mode,z-index,zoom},  
+    sensitive=true,
+    morecomment=[l]{//},
+    morecomment=[s]{/*}{*/},
+    morestring=[b]',
+    morestring=[b]",
+    alsoletter={:},
+    alsodigit={-}
+}
