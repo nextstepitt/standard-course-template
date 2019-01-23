@@ -146,7 +146,9 @@ The remainder of this document describes the project structure and how to build 
 |└──&nbsp;workbook&#8209;chapters.tex|This LaTeX document organizes the chapter sections and is used for both the book and slides.|
 |└──&nbsp;workbook&#8209;slides.tex|This defines the structure of the slide document.|
 |└──&nbsp;workbook.tex|This defines the structure of the book.|
-|README.md|The contents of this document should be replaced with new information to reflect the project being released.
+|logo.png|The logo for the project displayed by some Git servers, especially GitLab.|
+|LICENSE.md|The MIT License file for this project.|
+|README.md|The contents of this document should be replaced with new information to reflect the project being released, and if not freely available then the MIT License should be removed.|
 
 ## Student_Files
 
