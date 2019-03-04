@@ -1,0 +1,66 @@
+#!/bin/bash
+# build.sh
+# Copyright © 2018-2019 NextStep IT Training, a division of Smallrock Internet Services, Inc. All rights reserved.
+#
+# Build workbook, slides, and outline and copy the PDFs to the Distribution folder. Build clean will remove the
+# latex temporary folders and the pdfs from the Distribution folder.
+#
+
+usage() {
+    echo "usage: build [workbook|slides|outline|all|clean]"
+}
+
+workbook() {
+    cd "${pwd}/Workbook" && latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=./.latex-temp workbook.tex && cp ./.latex-temp/workbook.pdf ../Distribution
+}
+
+slides() {
+    cd "${pwd}/Workbook" && latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=./.latex-temp workbook-slides.tex && cp ./.latex-temp/workbook-slides.pdf ../Distribution
+}
+
+outline() {
+    cd "${pwd}/Outline" && latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=./.latex-temp outline.tex && cp ./.latex-temp/outline.pdf ../Distribution
+}
+
+clean() {
+    # rm -f ./Distribution/*.pdf
+    rm -rf ./Outline/.latex-temp
+    rm -rf ./Workbook/.latex-temp
+}
+
+pwd=$(pwd)
+
+if [[ $# -eq 0 ]] ; then
+    usage
+    exit 0
+fi
+
+case $1 in
+
+    all)
+        workbook
+        slides
+        outline
+        ;;
+
+    clean)
+        clean
+        ;;
+    
+    outline)
+        outline
+        ;;
+
+    slides)
+        slides
+        ;;
+
+    workbook)
+        workbook
+        ;;
+
+    *)
+        usage
+        ;;
+esac
+

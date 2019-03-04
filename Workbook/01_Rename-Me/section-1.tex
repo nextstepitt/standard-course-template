@@ -12,11 +12,12 @@
 
 \section{[Insert Section One Title]}
 
-\begin{sectiontopics}
-\topicselected{[ Insert Section One Title]}
-\topic{[Insert Section Two Title]}
-\topic{Lab - [Insert Chapter Title]}
-\end{sectiontopics}
+\sectiontitles{
+    \sectiontitleselected{[ Insert Section One Title]}
+    \sectiontitle{[Insert Section Two Title]}
+    \sectiontitle{[Insert Section Three Title]}
+    \sectiontitle{Lab - [Insert Chapter Title]}
+}
 
 
 %%% [Insert Topic]
@@ -48,32 +49,44 @@ $
 The \$ character will be used as the command line prompt in all examples.
 \end{displaynote}
 
-% Table; these macros leverage tabularx, so the first argument is the column layout and the second is a
-% tableheader and tablerows. The arguments to tableheader and tablerow are the column data, and the
-% number of columns must line up with the layout. The layout uses the tabularx rules, but most of the
-% time the | symobols produce veritcal lines, the l column is sized to the content (usually a name) and
-% the X column takes up the remaining space (usually a description).
+% \begin{table}[H]
+%     \resizebox{\tablewidth}{!}{
+%         \hspace*{10pt}\begin{minipage}{\textwidth}
+%             \def\arraystretch{1.5}
+%             \rowcolors{2}{codeblock}{white}
+%             \begin{tabularx}{\textwidth}{|l|X|}
+%                 \hline
+%                 \textbf{Header Column One} & \textbf{Header Column Two}\\
+%                 \hline
+%                 Row one, column one & Row one, column two\\
+%                 \hline
+%                 Row two, column one & Row two, column two\\
+%                 \hline
+%             \end{tabularx}
+%         \end{minipage}
+%     }
+% \end{table}
 
 \topictable{|l|X|}{
-\tableheader{Header Column One}{Header Column Two}
-\tablerow{Row one, column one}{Row one, column two}
-\tablerow{Row two, column one}{Row two, column two}
+    \tableheader{Header Column One}{Header Column Two}
+    \tablerow{Row one, column one}{Row one, column two}
+    \tablerow{Row two, column one}{Row two, column two}
 }
 
 % The codeblock, table, or image is usually followed with a list of one to three bullet points.
-\begin{itemize}
-\item This is the first bullet point of the topic
-\item This is the second bullet point of the topic
-\end{itemize}
+\bulletlist{
+    \item This is the first bullet point of the topic
+    \item This is the second bullet point of the topic
+}
 
 
 %%% [Insert Second Topic..., follow topics with a checkpoint (in section-2) if there is only one section]
 
 \subsection{[Insert Topic Two Title]}
 
-\begin{itemize}
-\item Each topic must have content
-\end{itemize}
+\bulletlist{
+    \item Each topic must have content
+}
 
 
 \end{document}

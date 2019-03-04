@@ -18,7 +18,7 @@
 \usepackage{tabularx}
 \usepackage{textcomp}
 \usepackage{titlesec}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
 
 %% General global settings.
 
@@ -38,15 +38,6 @@
 \newcommand{\subsectionbreak}{}
 
 \setlength\parindent{0pt}  % Remove paragraph indentations.
-
-\restylefloat{table}       % Tables shouldn't float, they should stay in place.
-
-\definecolor{codeblock}{RGB}{238, 238, 238}
-\definecolor{codeblockbar}{RGB}{102, 153, 204}
-
-\newlength{\tablewidth}    % General length used to calculate table width
-\setlength{\tablewidth}{\textwidth minus 5pt}
-
 
 %% Cover Page
 %% This is used to create the background picture for the book cover page.
@@ -108,24 +99,33 @@
 %% Topics
 %% Define new environments for the chapter and section topics, and the definition of a topic and a selected topic.
 
-\newenvironment{chaptertopics}
-    {%
-        \begin{flushright}
-    }
-    {%
-        \end{flushright}
-    }
+\newcommand\chaptersectiontitles[1]{\begin{flushright}\textbf{#1}\end{flushright}\vspace{2ex}}
+% \newenvironment{chaptertopics}
+%     {%
+%         \begin{flushright}
+%     }
+%     {%
+%         \end{flushright}
+%     }
 
-\newenvironment{sectiontopics}
-    {%
-        \begin{addmargin}{2em}
-    }
-    {%
-        \end{addmargin}
-    }
+\newcommand\sectiontitles[1]{\begin{addmargin}{2em}#1\end{addmargin}}
+% \newenvironment{sectiontopics}
+%     {%
+%         \begin{addmargin}{2em}
+%     }
+%     {%
+%         \end{addmargin}
+%     }
+    
+\newcommand{\sectiontitle}[1]{#1 \\}
+\newcommand{\sectiontitleselected}[1]{\textbf{#1} \\}
 
-\newcommand{\topic}[1]{#1 \\}
-\newcommand{\topicselected}[1]{\textbf{#1} \\}
+
+%% Bullet lists (for outline chapters). The new command is to adjust the spacing
+%% after the bullet items. Use \item inside the bulletlist argument.
+
+\newcommand{\bulletlist}[1]{\begin{itemize}\setlength\itemsep{-0.125em}{#1}\end{itemize}}
+
 
 %% Figures.
 
@@ -163,22 +163,28 @@
 % }
 % \end{table}
 
+\restylefloat{table}       % Tables shouldn't float, they should stay in place.
+\newlength{\tablewidth}    % General length used to calculate table width
+\setlength{\tablewidth}{\textwidth minus 5pt}
+\definecolor{altrow}{RGB}{238, 238, 238}
+
 \makeatletter
 
-\newcommand{\topictable}[2]
-    {%
+\newcommand{\topictable}[2]{%
     \begin{table}[H]
-        \resizebox{\tablewidth}{!}{
-        \hspace*{10pt}\begin{minipage}{\textwidth}
-        \def\arraystretch{1.5}
-        \begin{tabularx}{\textwidth}{#1}
+    \resizebox{\tablewidth}{!}{
+    \hspace*{10pt}\begin{minipage}{\textwidth}
+    \def\arraystretch{1.5}
+    \rowcolors{2}{altrow}{white}
+    \begin{tabularx}{\textwidth}{#1}
+        \rowcolor{gray!33}
         #2
         \hline
         \end{tabularx}
         \end{minipage}
         }
     \end{table}
-    }
+}
 
 \newcommand{\donextheadercolumn}[1]{ & \textbf{#1}\@ifnextchar\bgroup{\donextheadercolumn}{ \\ }}
 \newcommand{\chknextheadercolumn}{\@ifnextchar\bgroup{\donextheadercolumn}{ \\ }}
@@ -191,6 +197,9 @@
 \makeatother
 
 %% Code Blocks.
+
+\definecolor{codeblock}{RGB}{238, 238, 238}
+\definecolor{codeblockbar}{RGB}{102, 153, 204}
 
 \newmdenv[ leftmargin=15pt, skipbelow=0, linewidth=3pt, backgroundcolor=codeblock, linecolor=coldeblockbar, topline=false, rightline=false, bottomline=false, innerleftmargin=5pt, innerrightmargin=5pt, innertopmargin=0, innerbottommargin=0 ]{codebox}
 \lstset{ frame=none, xleftmargin=0pt, xrightmargin=0pt, basicstyle=\small }
@@ -210,13 +219,22 @@
 % Define listing languages not defined by the lstlistings package. Language names are always lower-case.
 %
 % keywords[1] is used for language syntax. Keywords[2] is used for primitive and built-in data types
-% and pre-defined variables and values. Keywords[3] is for built-in functions.
+% and pre-defined variables and values. Keywords[3] is for built-in functions. If you extend a language,
+% you must use more numbers, and make sure that you do not step on numbers used previously in the chain
+% of base languages.
 %
+
+%% Plain-text, no highlighting.
+
+\lstdefinelanguage{text}{
+}
+
+%% JavaScript
 
 \lstdefinelanguage{javascript}{
     keywords=[1]{break, case, catch, class, const, continue, debugger, default, delete, do, else, export, extends, finally, for, function, if, import, in, instanceof, let, new, of, return, static, switch, throw, try, typeof, var, while, var},
     keywordstyle=[1]\color{blue}\bfseries,
-    keywords=[2]{Array, boolean, Date, false, implements, import, NaN, Math, null, super, this, true, undefined},
+    keywords=[2]{Array, boolean, Date, false, implements, import, NaN, Number, Math, null, String, super, this, true, undefined},
     keywordstyle=[2]\color{darkgray}\bfseries,
     keywords=[3]{isNaN, parseInt, parseFloat},
     keywordstyle=[3]\color{darkgray}\bfseries,
@@ -230,28 +248,66 @@
     morestring=[b]"
 }
 
-\lstdefinelanguage{jsx}{
-    keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, var, let, const, class},
-    keywordstyle=\color{blue}\bfseries,
-    ndkeywords={class, export, boolean, throw, implements, import, this},
-    ndkeywordstyle=\color{darkgray}\bfseries,
-    identifierstyle=\color{black},
-    sensitive=false,
-    comment=[l]{//},
-    morecomment=[s]{/*}{*/},
-    commentstyle=\color{purple}\ttfamily,
-    stringstyle=\color{red}\ttfamily,
-    morestring=[b]',
-    morestring=[b]"
+\lstdefinelanguage{js}[]{javascript}{}
+
+%% JSX extends JavaScript
+
+\lstdefinelanguage{jsx}[]{javascript}{
+    alsoletter=-,
+    morestring=[b]",stringstyle=\color[rgb]{0,0,1},
+    moredelim=*[s][{\color[rgb]{0.75,0,0}}]{<}{>},
+    moredelim=[s][{\color{purple}}]{<!--}{-->},
+    moredelim=[l][{\color[rgb]{0,0,0}}]{\ <\ },
+    moredelim=[l][{\color[rgb]{0,0,0}}]{\ <=\ },
+    moredelim=[l][{\color[rgb]{0,0,0}}]{\ >\ },
+    moredelim=[l][{\color[rgb]{0,0,0}}]{\ >=\ },
+    moredelim=[l][{\color[rgb]{0,0,0}}]{\ =>\ },
 }
 
-% define listing language json
+%% JSON looks like JavaScript arrays and objects, but nothing more. There are only strings, numbers, and true and false.
 
 \lstdefinelanguage{json}{
-    keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, var, let, const},
-    keywordstyle=\color{blue}\bfseries,
-    ndkeywords={class, export, boolean, throw, implements, import, this},
-    ndkeywordstyle=\color{darkgray}\bfseries,
+    keywords=[2]{false, true},
+    keywordstyle=[2]\color{darkgray}\bfseries,
+    stringstyle=\color{red}\ttfamily,
+    morestring=[b]',
+    morestring=[b]"
+}
+
+%% TypeScript extends JavaScript.
+
+\lstdefinelanguage{typescript}[]{javascript}{
+    keywords=[91]{interface, enum, implements},
+    keywordstyle=[91]\color{blue}\bfseries,
+    keywords=[92]{string, number, boolan},
+    keywordstyle=[2]\color{darkgray}\bfseries,
+}
+
+\lstdefinelanguage{ts}[]{typescript}{}
+
+%% TSX extends TypesScript (this is a copy of jsx, but we cannot combine them).
+
+\lstdefinelanguage{tsx}[]{typescript}{
+    alsoletter=-,
+    morestring=[b]",stringstyle=\color[rgb]{0,0,1},
+    moredelim=*[s][{\color[rgb]{0.75,0,0}}]{<}{>},
+    moredelim=[s][{\color{purple}}]{<!--}{-->},
+    moredelim=[l][{\color[rgb]{0,0,0}}]{\ <\ },
+    moredelim=[l][{\color[rgb]{0,0,0}}]{\ <=\ },
+    moredelim=[l][{\color[rgb]{0,0,0}}]{\ >\ },
+    moredelim=[l][{\color[rgb]{0,0,0}}]{\ >=\ },
+    moredelim=[l][{\color[rgb]{0,0,0}}]{\ =>\ },
+}
+
+%% C#.
+
+\lstdefinelanguage{csharp}{
+    keywords=[1]{ abstract, as, base, break, case, catch, checked, class, const, continue, default, delegate, do, double, else, enum, event, explicit, extern, finally, fixed, for, foreach, goto, if, implicit, in, interface, internal, is, lock, namespace, new, object, operator, out, override, params, private, protected, public, readonly, ref, return, sealed, sizeof, stackalloc, static, struct, switch, throw, try, unchecked, unsafe, using, static, virtual, volatile, while },
+    keywordstyle=[1]\color{blue}\bfseries,
+    keywords=[2]{ bool, byte, char, decimal, false, float, int, long, null, sbyte, short, string, this, true, uint, ulong, ushort, void },
+    keywordstyle=[2]\color{darkgray}\bfseries,
+    keywords=[3]{ typeof },
+    keywordstyle=[3]\color{darkgray}\bfseries,
     identifierstyle=\color{black},
     sensitive=false,
     comment=[l]{//},
@@ -262,37 +318,9 @@
     morestring=[b]"
 }
 
-% define listing language TypeScript and TSX
+\lstdefinelanguage{cs}[]{csharp}{}
 
-\lstdefinelanguage{typescript}{
-    keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, var, let, const},
-    keywordstyle=\color{blue}\bfseries,
-    ndkeywords={class, interface, enum, export, boolean, throw, implements, import, this},
-    ndkeywordstyle=\color{darkgray}\bfseries,
-    identifierstyle=\color{black},
-    sensitive=false,
-    comment=[l]{//},
-    morecomment=[s]{/*}{*/},
-    commentstyle=\color{purple}\ttfamily,
-    stringstyle=\color{red}\ttfamily,
-    morestring=[b]',
-    morestring=[b]"
-}
-
-\lstdefinelanguage{tsx}{
-    keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, var, let, const},
-    keywordstyle=\color{blue}\bfseries,
-    ndkeywords={class, interface, enum, export, boolean, throw, implements, import, this},
-    ndkeywordstyle=\color{darkgray}\bfseries,
-    identifierstyle=\color{black},
-    sensitive=false,
-    comment=[l]{//},
-    morecomment=[s]{/*}{*/},
-    commentstyle=\color{purple}\ttfamily,
-    stringstyle=\color{red}\ttfamily,
-    morestring=[b]',
-    morestring=[b]" 
-}
+%% HTML5 & CSS.
 
 \lstdefinelanguage{html5}{
     language=html,
@@ -475,62 +503,4 @@
     },  
     morecomment=[s]{<!--}{-->},
     tag=[s]
-}
-
-\lstdefinelanguage{css}{
-    keywords={accelerator,azimuth,background,background-attachment,
-        background-color,background-image,background-position,
-        background-position-x,background-position-y,background-repeat,
-        behavior,border,border-bottom,border-bottom-color,
-        border-bottom-style,border-bottom-width,border-collapse,
-        border-color,border-left,border-left-color,border-left-style,
-        border-left-width,border-right,border-right-color,
-        border-right-style,border-right-width,border-spacing,
-        border-style,border-top,border-top-color,border-top-style,
-        border-top-width,border-width,bottom,caption-side,clear,
-        clip,color,content,counter-increment,counter-reset,cue,
-        cue-after,cue-before,cursor,direction,display,elevation,
-        empty-cells,filter,float,font,font-family,font-size,
-        font-size-adjust,font-stretch,font-style,font-variant,
-        font-weight,height,ime-mode,include-source,
-        layer-background-color,layer-background-image,layout-flow,
-        layout-grid,layout-grid-char,layout-grid-char-spacing,
-        layout-grid-line,layout-grid-mode,layout-grid-type,left,
-        letter-spacing,line-break,line-height,list-style,
-        list-style-image,list-style-position,list-style-type,margin,
-        margin-bottom,margin-left,margin-right,margin-top,
-        marker-offset,marks,max-height,max-width,min-height,
-        min-width,-moz-binding,-moz-border-radius,
-        -moz-border-radius-topleft,-moz-border-radius-topright,
-        -moz-border-radius-bottomright,-moz-border-radius-bottomleft,
-        -moz-border-top-colors,-moz-border-right-colors,
-        -moz-border-bottom-colors,-moz-border-left-colors,-moz-opacity,
-        -moz-outline,-moz-outline-color,-moz-outline-style,
-        -moz-outline-width,-moz-user-focus,-moz-user-input,
-        -moz-user-modify,-moz-user-select,orphans,outline,
-        outline-color,outline-style,outline-width,overflow,
-        overflow-X,overflow-Y,padding,padding-bottom,padding-left,
-        padding-right,padding-top,page,page-break-after,
-        page-break-before,page-break-inside,pause,pause-after,
-        pause-before,pitch,pitch-range,play-during,position,quotes,
-        -replace,richness,right,ruby-align,ruby-overhang,
-        ruby-position,-set-link-source,size,speak,speak-header,
-        speak-numeral,speak-punctuation,speech-rate,stress,
-        scrollbar-arrow-color,scrollbar-base-color,
-        scrollbar-dark-shadow-color,scrollbar-face-color,
-        scrollbar-highlight-color,scrollbar-shadow-color,
-        scrollbar-3d-light-color,scrollbar-track-color,table-layout,
-        text-align,text-align-last,text-decoration,text-indent,
-        text-justify,text-overflow,text-shadow,text-transform,
-        text-autospace,text-kashida-space,text-underline-position,top,
-        unicode-bidi,-use-link-source,vertical-align,visibility,
-        voice-family,volume,white-space,widows,width,word-break,
-        word-spacing,word-wrap,writing-mode,z-index,zoom},  
-    sensitive=true,
-    morecomment=[l]{//},
-    morecomment=[s]{/*}{*/},
-    morestring=[b]',
-    morestring=[b]",
-    alsoletter={:},
-    alsodigit={-}
 }

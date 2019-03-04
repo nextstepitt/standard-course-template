@@ -8,6 +8,7 @@
 
 \providecommand{\main}{.} % from https://tex.stackexchange.com/questions/289450/path-of-figures-in-different-directories-with-subfile-latex
 \documentclass[oneside, 14pt]{report}
+\usepackage[table]{xcolor} % This is added here because it needs to go first to get the table argument loaded, later packages don't ask for that.
 \usepackage{eso-pic}
 \usepackage{etoolbox}
 \usepackage{extsizes}
@@ -18,7 +19,7 @@
 
 % Preamble.
 
-\input{\main/_Preamble/workbook-def}
+\input{\main/_Preambles/workbook-def}
 
 % Up the section and subsection font size to large at the top of the slides.
 

@@ -2,6 +2,41 @@
 
 # Standard Course Template
 
+- [Standard Course Template](#standard-course-template)
+  - [Introduction](#introduction)
+  - [License](#license)
+  - [Support](#support)
+  - [Upgrading a Project from a Previous Version](#upgrading-a-project-from-a-previous-version)
+  - [Installing LaTeX](#installing-latex)
+  - [Using Visual Studio Code](#using-visual-studio-code)
+  - [Project Steps](#project-steps)
+    - [Create the Student Files Repository](#create-the-student-files-repository)
+    - [Update the Course Repository](#update-the-course-repository)
+  - [Project Structure](#project-structure)
+  - [Student_Files](#studentfiles)
+  - [Working with the Workbook](#working-with-the-workbook)
+    - [Overview](#overview)
+    - [Sections](#sections)
+    - [section-0.tex](#section-0tex)
+    - [section-(1-n).tex](#section-1-ntex)
+      - [Images](#images)
+        - [Including Images](#including-images)
+        - [How Images are Found](#how-images-are-found)
+      - [Changing the Cover Page and Slides](#changing-the-cover-page-and-slides)
+      - [Code Blocks](#code-blocks)
+      - [Tables](#tables)
+      - [Lists](#lists)
+      - [Descriptive Text](#descriptive-text)
+    - [section-lab.tex](#section-labtex)
+  - [Outline](#outline)
+  - [Building and Publishing](#building-and-publishing)
+    - [Replacing the README.md File](#replacing-the-readmemd-file)
+    - [PDF](#pdf)
+  - [Conclusion](#conclusion)
+  - [Contributing](#contributing)
+  - [Authors or Acknowledgments](#authors-or-acknowledgments)
+
+
 ## Introduction
 
 This course template provides standard structure and technology for managing and dstribution courseware.
@@ -26,6 +61,25 @@ And, best of all, it is definiately faster than trying to fight with a WYSIWIG e
 
 The course template is licensed under the MIT license. The corresponding courseware when developed is not. You may use and modify all or part of it as you choose, as long as attribution to the source is provided per the license. See the details in the [license file](./LICENSE.md) or at the [Open Source Initiative](https://opensource.org/licenses/MIT)
 
+## Support
+
+Since I give stuff away for free, and if you would like to keep seeing more stuff like this, then please consider
+a contribution to *Joel's Coffee Fund* at **Smallrock Internet** to help keep the good stuff coming :)<br />
+
+[![Donate](.common/Donate-Paypal.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=XPUGVGZZ8RUAA)
+
+## Upgrading a Project from a Previous Version
+
+If the major version number has not changed, then merging the new *_Preambles* folder content with an existing project, and merging in any changes to *workbook.tex* and *workbook-slides.tex* should be sufficient.
+Any new features should be additions, and backward compatible to previous versions with the same major number.
+You will simply be able to incorporate the new features from this point on.
+
+If there is a major version number has changed, then the folder layout for a course project has likely changed and some of the commands will not be backward compatible.
+Their names may have changed, or perhaps they do not even exist anymore.
+You should be able to restructure an exsiting project and merge in the new files without significant trouble, but you may need to do some global changes over all your LaTeX files if the command names have been changed.
+Read the documentation below on [Working with the Workbook](#working-with-the-workbook) to see which, if any, commands have changed.
+
+
 ## Installing LaTeX
 
 LaTex is a text-based typesetting language with definable macros and is perfect for developing course material.
@@ -33,20 +87,26 @@ Comparable in technique to HTML, XML, or Markdown, with supporting tools almost 
 including PDF and e-publishing formats.
 
 Visit this page at the official Latex Project for details about how to install the tool: https://www.latex-project.org/get/.
-Note: on MacOS MacTex may also be installed through Homebrew:
+
+On MacOS MacTex the simple way to install LaTeX is through Homebrew:
 
 ```text
 $ brew tap caskroom/cask
 $ brew cask install mactex
 ```
 
+On Microsoft Windows this template has been tested with the TeX Live distribution, found at https://www.tug.org/texlive/. However, we have found that the network install of TeX Live 2018 does not seem to be complete, and we have only been successful using a full install from an ISO download. We use the *textlive2018-20180414.iso* downloaded from http://mirrors.rit.edu/CTAN/systems/texlive/Images/texlive2018-20180414.iso. 
+
+## Using Visual Studio Code
+
 Visual Studio Code from Microsoft is an excellent tool for editing course projects, it works in all of the major operating system environments: Windows, MacOS, and Linux.
 VSCode was used to build this template project.
 You may want to add the "LaTeX Workshop" extension by James Yu, it helps with compiling the source files and has a built-in PDF previewer.
-You may also want the "Spelling Checker (RU, EN)" by Julia to help avoid gramatical and spelling errors.
+You may also want the "Spelling Checker (RU, EN)" extension by Julia to help avoid gramatical and spelling errors.
 
-When you use VSCode and the LaTeX Workshop, in the settings for LaTeX Workshop add an output-directory for building the LaTeX sources.
-The path is relative to the folder where the .tex source file is located:
+When you use VSCode and the LaTeX Workshop, in the settings for LaTeX Workshop you must add an output-directory for building the LaTeX sources.
+Look for the settings in the Visual Studio Code preferences.
+The folder name is *./.latex-temp*, and the path is relative to the folder where the .tex source file is located:
 
 ```json
 "latex-workshop.latex.tools": [
@@ -99,26 +159,31 @@ These instructions assume a basic familiarity with Git.
 6. In the new project folder (it should still be *Student_Files/Rename-Me*) use *git add --all* to add everything to the Git staging area (the *index*).
 7. Commit the staging area with *git commit -m "Initial commit of student file project."*.
 8. Change the name of the folder *Student_Files/Rename-Me* to the course title.
-9. Create a remote *origin* repository for the student files (probably at GitHub).
+9. Create a remote *origin* repository for the student files (probably at GitHub). The format of the project names at GitHub is always COURSE-NUMBER_Student_Files, for example https://github.com/nextstepitt/NS60603_Student_Files is the path to the student files for React Programming using TypeScript. Student file repositories are usually public and may be cloned or downloaded by anybody.
 10. Add the new *origin* remote to the project: *git remote add origin <New-Student-Files-Origin-URI>*.
 11. Push the local repository to the remote (it should have only the master branch).
 12. Use an appropriate branching scheme of your choice for development of the student files project: GitFlow, Trunk Based Development, etc.
 
+Special note: after publication the student files may be cloned or downloaded as a ZIP file from https://github.com/nextstepitt.
+When downloaded as a ZIP file the top-level folder will be the name of the folder in student_files, with "-master" appended to it.
+This is the default action of GitHub to append the branch name being zipped up, and is irrelevant to the students.
+They can leave the name with "-master" or remove it from the folder name if they choose.
+
 ### Update the Course Repository
 
-12. Move to the course repository folder.
-13. Link the new student files origin to course respository with *git submodule add <New-Student-Files-Origin-URI>*. Use the URI to the origin, not the local copy, so that if this repository is cloned it will point to the origin for the student files.
-14. Move to the *Workbook* folder.
-15. Use *git mv 01_Rename-me 01_<new chapter name>* and rename the first chapter.
-16. Edit the *workbook-chapters.tex* file and change the name of the first chapter where it is used to link to the subfiles (there are four links).
-17. Use *git status* to make sure that Git has the submodule link and the modified *workbook-chapters.tex* file in the staging area.
-18. Commit the staging area with *git commit -m "Initial commit of course <course name>."*.
-19. Use *git remote -v* to list the current remote repositories, and if there are any use *git remote remove <name>* to remove each one.
-20. Create a new remote *origin* repository for the course project at whatever provider you use for private repositories: GitHub? GitLab?.
-21. Add the new *origin* remote to the project: *git remote add origin <New-Course-URI>*.
-22. Push the local repository to the remote (it should have only the master branch).
-11. Use an appropriate branching scheme of your choice for development of the course project: GitFlow, Trunk Based Development, etc.
-12. Before you publish an actual release, replace this file with a README.md that describes the project (we assume you need to keep it around for now to help you develop the course material).
+1.  Move to the course repository folder.
+2.  Link the new student files origin to course respository with *git submodule add <New-Student-Files-Origin-URI>*. Use the URI to the origin, not the local copy, so that if this repository is cloned it will point to the origin for the student files.
+3.  Move to the *Workbook* folder.
+4.  Use *git mv 01_Rename-me 01_<new chapter name>* and rename the first chapter.
+5.  Edit the *workbook-chapters.tex* file and change the name of the first chapter where it is used to link to the subfiles (there are four links).
+6.  Use *git status* to make sure that Git has the submodule link and the modified *workbook-chapters.tex* file in the staging area.
+7.  Commit the staging area with *git commit -m "Initial commit of course <course name>."*.
+8.  Use *git remote -v* to list the current remote repositories, and if there are any use *git remote remove <name>* to remove each one.
+9.  Create a new remote *origin* repository for the course project at whatever provider you use for private repositories. The format of the project name should be COURSE-NUMBER_Course_Name, for example https://gitlab.com/nextstepitt/NS60603_React_Programming_using_TypeScript. Course repositories are usually private to the authors of the course, which is why we personally put them at GitLab instead of GitHub.
+10. Add the new *origin* remote to the project: *git remote add origin <New-Course-URI>*.
+11. Push the local repository to the remote (it should have only the master branch).
+12. Use an appropriate branching scheme of your choice for development of the course project: GitFlow, Trunk Based Development, etc.
+13. Before you publish an actual release, replace this file with a README.md that describes the project (we assume you need to keep it around for now to help you develop the course material). Use the README-PROJECT.md file as a template.
 
 The remainder of this document describes the project structure and how to build out the course.
 
@@ -195,7 +260,7 @@ The workbook is a multi-document project typeset initially to Acrobat PDF using 
 The structure of the LaTeX documents is such that you really do not need to know much about LaTeX.
 All that is really necessary is to understand where to put image files and how to use the macros that have been defined for you!
 You should simply be able to plug your content into the templates and everything will work.
-Note: $ and & are sometimes special characters in the LaTeX world; escape them with a backslash in your text.
+Note: $ and & are sometimes special characters in the LaTeX world; escape them by preceeding them with a backslash in your text.
 
 The workbook is divided into a preamble of LaTeX definitions for consistent course material, and a series of subfiles in each chapter of the book.
 The book starts with a *00_Front-Matter* chapter that contains subfiles for:
@@ -210,8 +275,16 @@ The copyright is boilerplate, but the title and copyright dates must be inserted
 and the trademark list may need to be updated.
 
 The foreword, introduction, and preface need to be written if they are to be included.
+If you want to skip something, the links to include these documents should be commented out in the *workbook.tex* file.
 
 The prelude description, setup requirements, prerequisites, and agenda all need to be updated.
+
+The workbook source is designed to also be used to generate a PDF slide deck, with one section topic per slide in high-definition ratio.
+If the content of a topic is more than will fit on a single slide, it will be extended onto the next slide.
+Becaue the topics are separated differently, and may extend across more than one page, the slide numbers will never line up with the book
+page numbers.
+This is why the chapters, sections, and section topics are all numbered in the text.
+See the paragraph on [Building and Publishing](#building-and-publishing) for more details about compiling the book, slides, and outline.
 
 The "how to" for the workbook is broken into:
 
@@ -227,7 +300,7 @@ The "how to" for the workbook is broken into:
 
 ### Sections
 
-Each chapter folder contains two or more LaTeX sections files: section-0.tex, section-1.tex, section-2.tex, section-3.tex section-lab.tex.
+Each chapter folder contains two or more LaTeX sections files: section-0.tex, section-1.tex, section-2.tex, section-3.tex, and section-lab.tex.
 There may or not be a section-2 or section-3, but there should never be more than three sections (rule of threes).
 The lab section is optional, it depends on the type of material being prepared. 
 
@@ -239,19 +312,20 @@ or two sentence overview of what the chapter is about.
 ```text
 \chapter{[Insert Chapter Title]}
 
-\begin{chaptertopics}
-\topic{Topic One}
-\topic{Topic Two}
-\topic{Lab - [Insert Chapter Title]}
-\end{chaptertopics}
+\chaptersectiontitles{
+    \sectiontitle{[Insert Section One Title]}
+    \sectiontitle{[Insert Section Two Title]}
+    \sectiontitle{[Insert Section Three Title]}
+    \sectiontitle{Lab - [Insert Chapter Title]}
+}
 
 \chapterobjectives
 
-\begin{itemize}
-\item First objective
-\item Second objective
-\item Third objective
-\end{itemize}
+\bulletlist{
+    \item First objective
+    \item Second objective
+    \item Third objective
+}
 
 \chapteroverview
 
@@ -271,21 +345,22 @@ There should be three objectives for the chapter, studies show that people handl
 
 Each one of these files is a separate part of the chapter; there should be no more than three (rule of threes).
 
-At the beginning of each section is the section title, which should match the corresponding title in the sectiontopics from the chapter title page in section-0.
-*\sectiontopics* is almost the same macro as *\chaptertopics*, except that it is left aligned.
+At the beginning of each section is the section title, which should match the corresponding title in the \\chaptertopics{} from the chapter title page in section-0.
+*\sectiontopics* is the same macro as *\chaptertopics*, with the same topic list, except that it is left aligned.
 A new macro, *\topicselected*, is introduced to typeset the current topic in bold:
 
 ```text
 \section{[Insert Section One Title]}
 
-\begin{sectiontopics}
-\topicselected{[ Insert Section One Title]}
-\topic{[Insert Section Two Title]}
-\topic{Lab - [Insert Chapter Title]}
-\end{sectiontopics}
+\sectiontitles{
+    \sectiontitleselected{[Insert Section One Title]}
+    \sectiontitle{[Insert Section Two Title]}
+    \sectiontitle{[Insert Section Three Title]}
+    \sectiontitle{Lab - [Insert Chapter Title]}
+}
 ```
 
-Each topic is identified with *\subsectiontopic*.
+Each individual topic in a section (not to be confused with the section topics) is identified with *\subsection{topic}*.
 The subsections are made up of *figures*, *code blocks*, and/or *tables*, followed by a bullet list explaining the topic.
 
 ```text
@@ -294,10 +369,10 @@ The subsections are made up of *figures*, *code blocks*, and/or *tables*, follow
 
 \fig{nsbanner}
 
-\begin{itemize}
-\item This is the first bullet point of the topic
-\item This is the second bullet point of the topic
-\end{itemize}
+\bulletlist{
+    \item This is the first bullet point of the topic
+    \item This is the second bullet point of the topic
+}
 ```
 
 Follow the template to set up the content of the sections:
@@ -340,6 +415,16 @@ In the workbook.tex file *\main* is defined as ".", but in the section it is def
 However, when the workbook is compiled, the *\providecommand* in the section is ignored!
 So, the change to ".." only takes place if the section is compiled by itself.
 
+#### Changing the Cover Page and Slides
+
+The images on the cover page for the workbook and slides, and the slide background, are branded to NextStep IT Training.
+The images are used in *workbook-def.tex* and are easy enough to change, by replacing the files in .images:
+
+* *workbook-cover.png*
+* *slide-cover.png*
+* *slide-background.jpg*
+
+
 #### Code Blocks
 
 Code blocks are set up in an easy-to-use LaTeX environment, *codeblock*:
@@ -356,7 +441,7 @@ console.log(x + y)
 This environment is built from the *mdbox* and *lstlistings* packages.
 All that is necessary is to specify the coding language as the parameter to the block.
 All of the languages defined for highlighting have strictly *lowercase* names.
-The currently supported langagues are *javascript*, *typescript*, *jsx*, *tsx*, *c*, *c++*, *java*, *c#*, and *python*.
+The supported langagues added to the default LaTeX list are: *text*, *javascript* (or *js), *jsx*, *json*, *typescript* (or *ts*), *tsx*, *csharp* (or *cs*), and *html5*.
 Also, *text* and *console* are plain text definitions without highlighting.
 The definitions for these languages and new languages are always being added, and you can easily follow the definitions
 in the *workbook-def.tex* file and the reference in the Listing document to change or add new stuff.
@@ -368,9 +453,9 @@ three macros have been created to reduce the structure to this:
 
 ```text
 \topictable{|l|X|}{
-\tableheader{Header Column One}{Header Column Two}
-\tablerow{Row one, column one}{Row one, column two}
-\tablerow{Row two, column one}{Row two, column two}
+    \tableheader{Header Column One}{Header Column Two}
+    \tablerow{Row one, column one}{Row one, column two}
+    \tablerow{Row two, column one}{Row two, column two}
 }
 ```
 
@@ -385,26 +470,27 @@ Each row has to have the same number of column arguments as the first argument d
 
 #### Lists
 
-Lists are pure LaTeX.
+Lists are almost pure LaTeX.
 Almost every topic should have bullet points below an image, codeblock, or table.
-The bullet list is created with an *itemize* environment.
+Bullet lists are expected to be created with \\bulletlist{}, which adjusts the spacing around the bullet points.
+A bullet list can be created with an *itemize* environment, but the spacing will not be correct.
 Items should be simple, no periods because this encourages long points.
 There should be one to three points, no more (rule of threes):
 
 ```text
-\begin{itemize}
+\bulletlist{
     \item This is the first point
     \item This is the second point
-\end{itemize}
+}
 ```
 
-In the labs we use numbered lists.
-Lists can be nested, which does happen sometimes in these situations.
+In the labs we use numbered lists, which are just created using \\begin{enumerate}.
+Lists can be nested, which is sometimes necessary in the lab instructions.
 LaTeX will switch from numbers to a, b, c for the second level.
 Codeblocks can appear between list elements:
 
 ```text
-\begin{enumerate}
+\begin{enumerate
     \item These are detailed project steps.
         \begin{enumerate}
             \item Lists may be nested.
@@ -422,7 +508,7 @@ Codeblocks can appear between list elements:
 
 If really necessary, a pure-LaTeX paragraph can be placed under a topic to provide
 a detailed description.
-We discourage the use of this in the text, the book is supposed to be a guide for the participants
+We discourage the use of large blocks of text, the book is supposed to be a guide for the participants
 and instructor, not a detailed instruction manual.
 
 ```text
@@ -439,17 +525,34 @@ Rather the subsections define the different information needed to complete the l
 
 Look at the source to the section-lab.tex file, and it will become apparent how to define each part.
 
+## Outline
+
+The Outline folder contains the file *outline.tex*, whih is a standard template for building an outline to deliver to customers.
+The format of the outline is self-explanatory.
+It is one of the three outputs that can be built by the scripts in the next paragraph: *workbook*, *slides*, and *outline*, which will be placed into the *Distribution* folder.
+
 ## Building and Publishing
 
 The instructions for adding LaTeX to your system were provided at the [top of this document](#Installing-LaTeX).
 
+### Replacing the README.md File
+
+In the new project this file (README.md) should be replaced with a README.md file appropriate for the project.
+README-PROJECT.md is a good template to start with.
+
 ### PDF
 
-The basic book and slides are PDF files, try using these two commands to build them (the $ is the command prompt):
+The outline, book, and slides are PDF files, they are created using these commands (Linux/MacOS bash shell format) to build them in the Workbook and Outline folders (the $ is the command prompt). You need to be in the correct directory to build each:
 
 ```text
+$ cd Outline
+$ latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=./.latex-temp outline.tex
+$ cp ./.latex-temp/outline.pdf ../Distribution
+$ cd Workbook
 $ latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=./.latex-temp workbook.tex
+$ cp ./.latex-temp/workbook.pdf ../Distribution
 $ latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=./.latex-temp workbook-slides.tex
+$ cp ./.latex-temp/workbook-slides.pdf ../Distribution
 ```
 
 Changing the output directory keeps LaTeX from making all the compiled versions next to the original .tex files, but
@@ -458,17 +561,20 @@ it also means that workbook.pdf and workbook-slides.pdf will be placed in the .l
 If the PDF files are the final publication versions for the current course version, then move them to the Distribution
 folder before committing the version changes to the project.
 
-We have also built these into an operating-system agnostic package.json file, so you can just run:
+To make things simple we have built a bash script and a Windows batch file to do the work and placed them in the project folder: build and build.bat. They have five commands: workbook, slides, outline, all, and clean:
 
 ```text
-$ npm run build
-$ npm run build-slides
+$ ./build
+usage: build [workbook|slides|outline|all|clean]
+$ ./build workbook # (or build.bat workbook on a Windows computer)
 ```
+
+The *all* command builds everything, the PDF files are copied to the *Distribution* folder. The *clean* command removes the .latex-temp folders from the *Workbook* and *Outline* folders.
 
 Warning: you may get a LaTeX compilation warning from the package scrlfile.sty: "Command \@footnotemark  has changed. Check if current package is valid."
 This happens becauase of the way dependent packages are loaded in the source files.
 You may also see warnings coming out of some of the other packages for similar reasons.
-We have not found a way to fix these yet, or at least an easy way, so ignore them.
+To be honest, we really can't fix the warnings comming out of the dependent packages, that would be the responsibility of the authors of those packages.
 
 ## Conclusion
 
@@ -477,3 +583,11 @@ This template is an ever-evolving project, and the technology we use changes fre
 Check back, the current version will always offer you the best results, and that is what you are going to get anyways
 if you follow the instructions to clone this repository when you start a new project.
 Enjoy!
+
+## Contributing
+
+We are always looking for ways to make the template better. But remember: Keep it simple. Keep it minimal. Don't add every single feature just because you can, add a feature when a feature is required.
+
+## Authors or Acknowledgments
+
+* Joel Mussman

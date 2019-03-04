@@ -7,6 +7,7 @@
 
 \providecommand{\main}{.} % from https://tex.stackexchange.com/questions/289450/path-of-figures-in-different-directories-with-subfile-latex
 \documentclass[twoside, openright, titlepage]{book}
+\usepackage[table]{xcolor} % This is added here because it needs to go first to get the table argument loaded, later packages don't ask for that.
 \usepackage{eso-pic}
 \usepackage[left=2.5cm, right=2.5cm, top=2.5cm, bottom=1.75cm]{geometry}
 \usepackage{graphics}
@@ -15,7 +16,7 @@
 
 % Preamble.
 
-\input{\main/_Preamble/workbook-def}
+\input{\main/_Preambles/workbook-def}
 
 % Page headers and footers.
 % Renewing the rightmark from section and subsection must take place after the header and footer are cleared,

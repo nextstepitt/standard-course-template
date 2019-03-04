@@ -16,22 +16,23 @@
 
 \section{Lab - [Insert Chapter Title]}
 
-\begin{sectiontopics}
-\topic{[Insert Section One Title]}
-\topic{[Insert Section Two Title]}
-\topicselected{Lab - [Insert Chapter Title]}
-\end{sectiontopics}
+\sectiontitles{
+    \sectiontitle{[Insert Section One Title]}
+    \sectiontitle{[Insert Section Two Title]}
+    \sectiontitle{[Insert Section Three Title]}
+    \sectiontitleselected{Lab - [Insert Chapter Title]}
+}
     
 
 %%% Goals
 
 \subsection*{Goals}
 
-\begin{itemize}
-\item Goal number one
-\item Goal number two
-\item Goal number three
-\end{itemize}
+\bulletlist{
+    \item Goal number one
+    \item Goal number two
+    \item Goal number three
+}
 
 %%% Synopsis
 
@@ -44,25 +45,40 @@ Synopsis description of what is going to happen in the lab (reinforce the goals)
 
 \subsection*{Requirements}
 
-\begin{itemize}
-\item List of the requirements that the participant must meet; they should be able to complete the lab just from these requirements.
-\end{itemize}
+\bulletlist{
+    \item List of the requirements that the participant must meet; they should be able to complete the lab just from these requirements.
+}
 
 %%% Project Steps
 
 \subsection*{Project Steps}
 
 \begin{enumerate}
-\item These are detailed project steps. They should help anyone who needs help with what to do where, but the point is not to provide by-rote instructions.
-    \begin{enumerate}
-        \item Lists may be nested.
-        \item Second nested list item.
-    \end{enumerate}
-\item Second outer list item.
-\begin{codeblock}{javascript}
-Code blocks may be inserted between items.
-\end{codeblock}%
-\item Third outer list item.
+    \item These are detailed project steps. They should help anyone who needs help with what to do where, but the point is not to provide by-rote instructions.
+        \begin{enumerate}
+            \item Lists may be nested.
+            \item Second nested list item.
+        \end{enumerate}
+    \item Second outer list item.
+    \begin{codeblock}{tsx}
+// Code blocks may be inserted between items, but make sure the content starts at the left margin; this is a React component in TSX:
+
+import React, { Component } from 'react';
+
+interface MyComponentProps {
+
+    color: string;
+}
+
+class MyComponent extends Component<MyComponentProps> {
+
+    public render: ReactNode {
+
+        return <div style="float: left;">content</div>;
+    }
+}
+    \end{codeblock}%
+    \item Third outer list item.
 \end{enumerate}
 
 

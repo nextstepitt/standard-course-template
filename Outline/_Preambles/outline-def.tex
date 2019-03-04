@@ -1,0 +1,146 @@
+% outline-def.text
+% Copyright © 2018-2019 NextStep IT Training, a division of Smallrock Internet Services, Inc. All rights reserved.
+%
+% This file contains the definitions for building course material in LaTeX.
+%
+
+\usepackage[export]{adjustbox}
+\usepackage{enumitem}
+\usepackage{etoolbox}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage{lstlinebgrd}
+\usepackage{mdframed}
+\usepackage{scrextend}
+\usepackage{tabularx}
+\usepackage{textcomp}
+\usepackage{titlesec}
+\usepackage{xcolor}
+
+%% General global settings.
+
+\hbadness=99999                                 % Get some of the horizontal stuff that overflows the page width and wraps to shut up.
+\pagenumbering{arabic}                          % Turn the page number to Arabic (decimal).
+\raggedbottom                                   % Prevent vertical distribution of items on the pages.
+\renewcommand{\familydefault}{\sfdefault}       % Define the default font for the outline.
+\setlength\parindent{0pt}                       % Remove paragraph indentations.
+\setlength{\parskip}{0.5em}                     % Spacing after paragraphs.
+\newcommand{\sectionbreak}{}                    % Section break stays on same page.
+\titlespacing*{\section}{0pt}{1ex}{0.5ex}       % Section spacing.
+\newcommand{\subsectionbreak}{}                 % Subsection break stays on same page.
+\titlespacing*{\subsubsection}{0pt}{1ex}{0.5ex} % Subsubsection spacing.
+\newcommand{\subsubsectionbreak}{}              % Subsection break stays on same page.
+\titlespacing*{\subsubsection}{0pt}{1ex}{0.5ex} % Subsubsection spacing.
+
+
+%% Set fancyhdr
+
+\newcommand{\hdrtitle}[1]{
+    \pagestyle{fancy}
+    \fancyhf{}
+    \renewcommand{\leftmark}{#1}
+    \renewcommand{\rightmark}{#1}
+    \fancyhead[LE]{\thepage\hspace{2em}\textsc{\nouppercase{\leftmark}}}
+    \fancyhead[RO]{\textsc{\nouppercase{\rightmark}}\hspace{2em}\thepage}
+}
+
+
+%% Patch chapter to start on the same page as the logo and remove vertical
+
+\makeatletter
+\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
+\patchcmd{\@makeschapterhead}{\vspace*{50\p@}}{\vs[ace{0}]}{}{}% Removes space above \chapter* head
+\patchcmd{\@makeschapterhead}{\vskip 40\p@}{\vskip 0}{}{}% Removes space below \chapter* head
+\makeatother
+
+\titlespacing*{\chapter}{0pt}{0pt}{0pt}       % Section spacing.
+
+
+%% Bullet Lists (for outlien chapters). Use \item inside the topic list argument.
+
+\newcommand{\bulletlist}[1]{\begin{itemize}\setlength\itemsep{-0.125em}{#1}\end{itemize}}
+
+
+%% Code Blocks.
+
+\definecolor{codeblock}{RGB}{238, 238, 238}
+\definecolor{codeblockbar}{RGB}{102, 153, 204}
+\newmdenv[ leftmargin=15pt, skipbelow=0, linewidth=3pt, backgroundcolor=codeblock, linecolor=coldeblockbar, topline=false, rightline=false, bottomline=false, innerleftmargin=5pt, innerrightmargin=5pt, innertopmargin=0, innerbottommargin=0 ]{codebox}
+\lstset{ frame=none, xleftmargin=0pt, xrightmargin=0pt, basicstyle=\small }
+
+\lstnewenvironment{codeblock}[1]
+    {%
+        \mdframed[usetwoside=false, leftmargin=15pt, skipbelow=0, linewidth=3pt, backgroundcolor=codeblock, linecolor=codeblockbar, topline=false, rightline=false, bottomline=false, innerleftmargin=5pt, innerrightmargin=5pt, innertopmargin=0.5em, innerbottommargin=0]
+        \lstset{ language=#1, frame=none, xleftmargin=0pt, xrightmargin=0pt, basicstyle=\small, breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space}, showstringspaces=false }%
+    }
+    {%
+        \endmdframed
+    }
+
+
+%% Figures.
+
+\newcommand{\figuresize}{0.9}
+\newcommand{\fig}[1]{\begin{center}\includegraphics[width=\figuresize\textwidth]{#1}\end{center}}
+
+
+%% Tables.
+
+% Tables are just LaTeX tables, this is an example of what the topictable macros below actually produce:
+% \begin{table}[H]
+% \resizebox{\tablewidth}{!}{
+% \hspace*{10pt}\begin{minipage}{\textwidth}
+% \def\arraystretch{1.5}
+% \begin{tabularx}{\textwidth}{|l|X|}
+% \hline
+% \textbf{Header Column One} & \textbf{Header Column Two}\\
+% \hline
+% Row one, column one & Row one, column two\\
+% \hline
+% Row two, column one & Row two, column two\\
+% \hline
+% \end{tabularx}
+% \end{minipage}
+% }
+% \end{table}
+
+\restylefloat{table}                            % Tables shouldn't float, they should stay in place.
+\newlength{\tablewidth}                         % General length used to calculate table width
+\setlength{\tablewidth}{\textwidth minus 5pt}
+
+\makeatletter
+
+\newcommand{\topictable}[2]
+    {%
+    \begin{table}[H]
+        \resizebox{\tablewidth}{!}{
+        \hspace*{10pt}\begin{minipage}{\textwidth}
+        \def\arraystretch{1.5}
+        \begin{tabularx}{\textwidth}{#1}
+        #2
+        \hline
+        \end{tabularx}
+        \end{minipage}
+        }
+    \end{table}
+    }
+
+\newcommand{\donextheadercolumn}[1]{ & \textbf{#1}\@ifnextchar\bgroup{\donextheadercolumn}{ \\ }}
+\newcommand{\chknextheadercolumn}{\@ifnextchar\bgroup{\donextheadercolumn}{ \\ }}
+\newcommand{\tableheader}[1]{\hline\textbf{#1}\chknextheadercolumn}
+
+\newcommand{\donextcolumn}[1]{ & #1\@ifnextchar\bgroup{\donextcolumn}{ \\ }}
+\newcommand{\chknextcolumn}{\@ifnextchar\bgroup{\donextcolumn}{ \\ }}
+\newcommand\tablerow[1]{\hline#1\chknextcolumn}
+
+\makeatother
+
+
+%% Right-aligned title image
+
+\newcommand{\titleimagesize}{0.33}
+\newcommand\titleimage[2]{\begin{flushright}\hfill\includegraphics[width=\titleimagesize\textwidth]{#1}\newline#2\end{flushright}}
