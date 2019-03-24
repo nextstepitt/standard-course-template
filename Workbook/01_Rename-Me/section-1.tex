@@ -73,12 +73,26 @@ The \$ character will be used as the command line prompt in all examples.
     \tablerow{Row two, column one}{Row two, column two}
 }
 
-% The codeblock, table, or image is usually followed with a list of one to three bullet points.
+% The codeblock, table, or image is usually followed with a list of one to three bullet points. The command bulletlist, and
+% the environment bullets, close up the space between the items. Using the environment is preferred, because you cannot nest
+% an enumeration inside the bulletlist command.
+
 \bulletlist{
     \item This is the first bullet point of the topic
     \item This is the second bullet point of the topic
 }
 
+\begin{bullets}
+    \item This is the first bullet point of the topic
+    \item This is the second bullet point of the topic
+\end{bullets}
+
+% The numbers environment closes up the space between the lines a bit over using the enumerate environment.
+
+\begin{numbers}
+    \item This is the first bullet point of the topic
+    \item This is the second bullet point of the topic
+\end{numbers}
 
 %%% [Insert Second Topic..., follow topics with a checkpoint (in section-2) if there is only one section]
 

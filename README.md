@@ -26,15 +26,6 @@
       - [Code Blocks](#code-blocks)
       - [Tables](#tables)
       - [Lists](#lists)
-      - [Descriptive Text](#descriptive-text)
-    - [section-lab.tex](#section-labtex)
-  - [Outline](#outline)
-  - [Building and Publishing](#building-and-publishing)
-    - [Replacing the README.md File](#replacing-the-readmemd-file)
-    - [PDF](#pdf)
-  - [Conclusion](#conclusion)
-  - [Contributing](#contributing)
-  - [Authors or Acknowledgments](#authors-or-acknowledgments)
 
 
 ## Introduction
@@ -48,18 +39,18 @@ But in fact, the structure of these LaTeX documents is such that you really do n
 
 All that is really necessary is to understand where to put image files and how to use the macros that have been defined for you.
 You should simply be able to plug your content into the templates and everything will work.
-Note: $ and & are sometimes special characters in the LaTeX world; escape them by putting a backslash in front of them in your text.
+Note: $, _, and & are sometimes special characters in the LaTeX world; you may need to "escape" them by putting a backslash in front of them in your text.
 
 So, it really is not any more difficult to use for this template than HTML, XML, or Markdown.
 In fact, it is much simpler, you just have to learn our handful of macros, and a couple of LaTeX things like:
 wrap text with *\textbf{...}* for bold characters, and *\textit{...}* for italics (replace the elipses with your text).
 The rest of what you need to know comes below.
 
-And, best of all, it is definiately faster than trying to fight with a WYSIWIG editor (but you can use one if you want to)!
+And, best of all, it is definiately faster than trying to fight with a WYSIWIG editor (but you can use one for LaTeX if you want to)!
 
 ## License
 
-The course template is licensed under the MIT license. The corresponding courseware when developed is not. You may use and modify all or part of it as you choose, as long as attribution to the source is provided per the license. See the details in the [license file](./LICENSE.md) or at the [Open Source Initiative](https://opensource.org/licenses/MIT)
+The course template is licensed under the MIT license. The corresponding courseware when developed may not be. You may use and modify all or part of it as you choose, as long as attribution to the source is provided per the license. See the details in the [license file](./LICENSE.md) or at the [Open Source Initiative](https://opensource.org/licenses/MIT)
 
 ## Support
 
@@ -95,7 +86,7 @@ $ brew tap caskroom/cask
 $ brew cask install mactex
 ```
 
-On Microsoft Windows this template has been tested with the TeX Live distribution, found at https://www.tug.org/texlive/. However, we have found that the network install of TeX Live 2018 does not seem to be complete, and we have only been successful using a full install from an ISO download. We use the *textlive2018-20180414.iso* downloaded from http://mirrors.rit.edu/CTAN/systems/texlive/Images/texlive2018-20180414.iso. 
+On Microsoft Windows this template has been tested with the TeX Live distribution, found at https://www.tug.org/texlive/. However, we have found that the network install of TeX Live 2018 does not seem to be complete, and we have only been successful using a full install from an ISO download. We last tested this with the *textlive2018-20180414.iso* downloaded from http://mirrors.rit.edu/CTAN/systems/texlive/Images/texlive2018-20180414.iso. 
 
 ## Using Visual Studio Code
 
@@ -200,10 +191,11 @@ The remainder of this document describes the project structure and how to build 
 |Student_Files||
 |└──&nbsp;[Course Name]|A separate git project in a folder named as the course.|
 |Workbook||
+|└──&nbsp;_Front&#8209;Matter|Foreword, introduction, preface, and prelude sections.|
 |└──&nbsp;_Images|A single collection of all images used in the workbook. Experience guides that this works better when all the images are placed in the same folder, instead of sub-folders or trying to put the images in the chapter folders.|
-|└──&nbsp;_Preamble|*workbook-def.tex* contains the workbook definitions and macros.|
+|└──&nbsp;_Preambles|*workbook-def.tex* contains the workbook definitions and macros.|
+|└──&nbsp;_Presentation-Notes|Contains the *change-log.tex* and *presentation-notes* files that are assembled into the end of the book.|
 |└──&nbsp;.latex&#8209;temp|Output folder created during LaTeX compilation.|
-|└──&nbsp;00_Front&#8209;Matter|Foreword, introduction, preface, and prelude sections.|
 |└──&nbsp;01_Overview|Each chapter is numbered and titled.|
 |&nbsp;&nbsp;&nbsp;&nbsp;└──&nbsp;section-0.tex|The chapter header.|
 |&nbsp;&nbsp;&nbsp;&nbsp;└──&nbsp;section-1.tex|Each chapter section is numbered.|
@@ -217,7 +209,8 @@ The remainder of this document describes the project structure and how to build 
 
 ## Student_Files
 
-The student files always follow the same structure, the top-level folder is named after the course and can co-exist side-by-side with the files from other courses.
+The student files always follow the same structure, the top-level folder is a unique name with course number followed by "\_Student\_Files" and can co-exist side-by-side with the files from other courses in a "Student\_Files" folder.
+If this project is a presentation rather than a course, then rename the folder with "_Participant_Files".
 This folder is the root of a separate Git project that is accessible publically by the students at https://github.com/nextstepitt.
 Git will not merge the projects; if a .git folder exists in the student files course folder then its contents will ignored when commits are made to the course.
 Instead, Git will add a reference to the student files project.
@@ -228,7 +221,7 @@ The student files are layed out in a specific way:
 ```text
 Student_Files
 │
-└── React_Programming_TS
+└── NS60601_Student_Files
     └── Examples
     │    └── 02_Components
     │    └── ...
@@ -484,24 +477,56 @@ There should be one to three points, no more (rule of threes):
 }
 ```
 
-In the labs we use numbered lists, which are just created using \\begin{enumerate}.
+There is also an environment for bullet lists, which is the preferred usage because then you can nest them.
+As with \bulletlist, the between-item spacing has been adjusted, so this is preferred over \\begin{itemize}:
+
+```text
+\begin{bulletlist}
+    \item This is the first point
+    \item This is the second point
+\end{bulletlist}
+
+In the labs we use numbered lists, which are just created using \\begin{numbers}.
+numbers is a redefinition of enumerate, with the same spacing as bullets.
 Lists can be nested, which is sometimes necessary in the lab instructions.
 LaTeX will switch from numbers to a, b, c for the second level.
 Codeblocks can appear between list elements:
 
 ```text
-\begin{enumerate
+\begin{numbers}
     \item These are detailed project steps.
-        \begin{enumerate}
+        \begin{numbers}
             \item Lists may be nested.
             \item Second nested list item.
-        \end{enumerate}
+        \end{numbers}
     \item Second outer list item.
     \begin{codeblock}{javascript}
     Code blocks may be inserted between items.
     \end{codeblock}%
     \item Third outer list item.
-\end{enumerate}
+\end{numbers}
+```
+
+Occasionally it is necessary to start a new numbered list continuing the sequence from the previous list.
+Our preamble has a counter pre-defined to assist with this, *currentListNumber*.
+It is used to save the current counter at the end of the first list, and then reset the counter at the beginning of the second list:
+
+```text
+\begin{numbers}
+    \item This is the first point
+    \item This is the second point
+    \setcounter{currentListNumber}{\value{enumi}}
+\end{numbers}
+
+\par{
+    Something else.
+}
+
+\begin{numbers}
+    \setcounter{enumi}{\value{currentListNumber}}
+    \item This is the first point
+    \item This is the second point
+\end{numbers}
 ```
 
 #### Descriptive Text
@@ -524,6 +549,19 @@ The subsections in the lab are not topics, and in the slides outcome they are no
 Rather the subsections define the different information needed to complete the lab: *goals*, *synopsis*, *requirements*, *steps*, and *results*.
 
 Look at the source to the section-lab.tex file, and it will become apparent how to define each part.
+
+### Presentation Notes
+
+There are two files that are assmebled into the end of the workbook: *presentation-notes.tex* and *change-log.tex*.
+The presentation notes contains chapter-by-chapter, topic-by-topic notes for the presenter.
+
+The change log should be re-created as a new file for every edition.
+The change log for previous editions may be recovered using Git.
+If you are editing a new edition of the workbook, note the changes on a chapter-by-chapter, topic-by-topic basis.
+Major changes to a chapter, the deletion of a chapter, or the inclusion of a new chapter should just be mentioned at the chapter level.
+Changes, deletions, and additions to topic-slides are made at the topic level.
+Inserting an deleting new topics proves somewhat difficult because of the number changes; refer to the numbers in the original topic.
+When adding, refer to the topic number the new topic is added after.
 
 ## Outline
 
@@ -561,7 +599,13 @@ it also means that workbook.pdf and workbook-slides.pdf will be placed in the .l
 If the PDF files are the final publication versions for the current course version, then move them to the Distribution
 folder before committing the version changes to the project.
 
-To make things simple we have built a bash script and a Windows batch file to do the work and placed them in the project folder: build and build.bat. They have five commands: workbook, slides, outline, all, and clean:
+### Build Script
+
+To make things simple we have built a bash script and a Windows batch file to do the work and placed them in the project folder: build and build.bat.
+
+Edit the script or batch for your system, and change the course number to the current course. The Distribution folder will have the workbook, slides, and outline from the course template; you may delete these.
+
+The script or batch file has five commands: workbook, slides, outline, all, and clean:
 
 ```text
 $ ./build

@@ -8,6 +8,7 @@
 @ECHO OFF
 
 set cwd=%cd%
+set coursenumber="ns00300"
 
 if "%1" == "all" (
     call :all
@@ -37,15 +38,15 @@ exit /b
     goto :eof
 
 :workbook
-    cd "%cd%\Workbook" & latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=.\.latex-temp workbook.tex & copy .\.latex-temp\workbook.pdf ..\Distribution
+    cd "%cd%\Workbook" & latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=.\.latex-temp workbook.tex & copy .\.latex-temp\workbook.pdf ..\Distribution\%coursenumber%-workbook.pdf
     goto :eof
 
 :slides
-    cd "%cd%\Workbook" & latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=.\.latex-temp workbook-slides.tex & copy .\.latex-temp\workbook-slides.pdf ..\Distribution
+    cd "%cd%\Workbook" & latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=.\.latex-temp workbook-slides.tex & copy .\.latex-temp\workbook-slides.pdf ..\Distribution\%coursenumber%-workbook-slides.pdf
     goto :eof
 
 :outline
-    cd "%cd%\Outline" & latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=.\.latex-temp outline.tex & copy .\.latex-temp\outline.pdf ..\Distribution
+    cd "%cd%\Outline" & latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=.\.latex-temp outline.tex & copy .\.latex-temp\outline.pdf ..\Distribution\%coursenumber%-outline.pdf
     goto :eof
 
 :clean

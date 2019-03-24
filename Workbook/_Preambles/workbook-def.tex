@@ -12,9 +12,11 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{listings}
 \usepackage{lstlinebgrd}
+\usepackage{makecell}
 \usepackage{makeidx}
 \usepackage{mdframed}
 \usepackage{scrextend}
+\usepackage[T1]{fontenc}
 \usepackage{tabularx}
 \usepackage{textcomp}
 \usepackage{titlesec}
@@ -37,7 +39,10 @@
 \newcommand{\sectionbreak}{\clearpage}
 \newcommand{\subsectionbreak}{}
 
-\setlength\parindent{0pt}  % Remove paragraph indentations.
+% Remove paragraph indentations and set the space between them.
+
+\setlength\parindent{0pt}
+\setlength{\parskip}{0.75ex}
 
 %% Cover Page
 %% This is used to create the background picture for the book cover page.
@@ -125,7 +130,23 @@
 %% after the bullet items. Use \item inside the bulletlist argument.
 
 \newcommand{\bulletlist}[1]{\begin{itemize}\setlength\itemsep{-0.125em}{#1}\end{itemize}}
+\newenvironment{bullets}
+    {%
+        \begin{itemize}\setlength\itemsep{-0.125em}
+    }
+    {%
+        \end{itemize}
+    }
 
+\newenvironment{numbers}
+    {%
+        \begin{enumerate}\setlength\itemsep{-0.125em}
+    }
+    {%
+        \end{enumerate}
+    }
+
+\newcounter{currentListNumber}
 
 %% Figures.
 

@@ -6,20 +6,24 @@
 # latex temporary folders and the pdfs from the Distribution folder.
 #
 
+# Define the course number
+
+coursenumber="ns00300"
+
 usage() {
     echo "usage: build [workbook|slides|outline|all|clean]"
 }
 
 workbook() {
-    cd "${pwd}/Workbook" && latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=./.latex-temp workbook.tex && cp ./.latex-temp/workbook.pdf ../Distribution
+    cd "${pwd}/Workbook" && latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=./.latex-temp workbook.tex && cp ./.latex-temp/workbook.pdf ../Distribution/${coursenumber}-workbook.pdf
 }
 
 slides() {
-    cd "${pwd}/Workbook" && latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=./.latex-temp workbook-slides.tex && cp ./.latex-temp/workbook-slides.pdf ../Distribution
+    cd "${pwd}/Workbook" && latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=./.latex-temp workbook-slides.tex && cp ./.latex-temp/workbook-slides.pdf ../Distribution/${coursenumber}-workbook-slides.pdf
 }
 
 outline() {
-    cd "${pwd}/Outline" && latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=./.latex-temp outline.tex && cp ./.latex-temp/outline.pdf ../Distribution
+    cd "${pwd}/Outline" && latexmk -synctex=1 -interaction=nonstopmode -file-line-error -pdf -output-directory=./.latex-temp outline.tex && cp ./.latex-temp/outline.pdf ../Distribution/${coursenumber}-outline.pdf
 }
 
 clean() {

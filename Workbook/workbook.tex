@@ -6,6 +6,7 @@
 %
 
 \providecommand{\main}{.} % from https://tex.stackexchange.com/questions/289450/path-of-figures-in-different-directories-with-subfile-latex
+\providecommand{\notessubfilepath}{./_Presentation-Notes}
 \documentclass[twoside, openright, titlepage]{book}
 \usepackage[table]{xcolor} % This is added here because it needs to go first to get the table argument loaded, later packages don't ask for that.
 \usepackage{eso-pic}
@@ -43,12 +44,11 @@
 
     % Front matter (adjust which files are included as necessary)
 
-    \subfile{00_Front-Matter/copyright}
-    \subfile{00_Front-Matter/foreword}
-    \subfile{00_Front-Matter/introduction}
-    \subfile{00_Front-Matter/preface}
-
-    \subfile{00_Front-Matter/prelude}
+    \subfile{\main/_Front-Matter/copyright}
+    \subfile{\main/_Front-Matter/foreword}
+    \subfile{\main/_Front-Matter/introduction}
+    \subfile{\main/_Front-Matter/preface}
+    \subfile{\main/_Front-Matter/prelude}
 
     % Table of contents.
 
@@ -65,10 +65,11 @@
 
     % Chapter content.
 
-    \input{./workbook-chapters}
+    \input{\main/workbook-chapters}
 
-    % Include the instructor notes at the end of the book.
+    % Include the presentation notes and change log at the end of the book.
 
-    \subfile{00_Front-Matter/instructor-notes}
+    \subfile{\main/_Presentation-Notes/presentation-notes}
+    \subfile{\main/_Presentation-Notes/change-log}
 
 \end{document}
