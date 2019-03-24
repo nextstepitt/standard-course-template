@@ -542,6 +542,13 @@ and instructor, not a detailed instruction manual.
 }
 ```
 
+#### Emphasis
+
+Use the LaTeX command *\emph{}* to emphasize text in the bullet points and paragraphs.
+This will be the same as using *\textit{}* (italics) when the PDF is generated, but is more generic and adaptable.
+You also have the LaTeX command **\textbf{}** to make the text bold.
+This should be used more sparingly, it tends to draw the eye immediately causing the user to skip over other text on the way.
+
 ### section-lab.tex
 
 The lab section works slightly differently.
