@@ -30,6 +30,9 @@
 
 ## Introduction
 
+**New**: The *workbook-titles.tex* file consilidates the titles and images for formatting the document into one configuration!
+See the new step [Declarations and Titles](#Declarations-and-Titles) in the section [Working with the Workbook](#working-with-the-workbook).
+
 This course template provides standard structure and technology for managing and dstribution courseware.
 The three areas of focus are written material, participant files, and video presentations.
 
@@ -79,6 +82,8 @@ including PDF and e-publishing formats.
 
 Visit this page at the official Latex Project for details about how to install the tool: https://www.latex-project.org/get/.
 
+### MacOS
+
 On MacOS MacTex the simple way to install LaTeX is through Homebrew:
 
 ```text
@@ -86,7 +91,11 @@ $ brew tap caskroom/cask
 $ brew cask install mactex
 ```
 
+### Windows
+
 On Microsoft Windows this template has been tested with the TeX Live distribution, found at https://www.tug.org/texlive/. However, we have found that the network install of TeX Live 2018 does not seem to be complete, and we have only been successful using a full install from an ISO download. We last tested this with the *textlive2018-20180414.iso* downloaded from http://mirrors.rit.edu/CTAN/systems/texlive/Images/texlive2018-20180414.iso. 
+
+### Linux
 
 ## Using Visual Studio Code
 
@@ -128,6 +137,18 @@ The folder name is *./.latex-temp*, and the path is relative to the folder where
 
 Without this setting, the compiler files are placed alongside the .tex files, cluttering up the project!
 
+There is a process to viewing the PDF compilation of the LaTeX file being edited.
+The LaTeX Workshop instructions focus on individual documents or a complex document; in our development cycle we are really only looking at the
+document currently being edited and treat it as a single document.
+
+Given normal configuration, except for changing the output folder to ./.latex-temp, on every file save the LaTeX output will be rebuilt.
+If this is turned off and the file is built manually from the Command Palette with "LaTeX Workshop: 
+When the PDF file exists in the output directory, and only if it exists, the Command Palette command "LaTeX Workshop: View LaTeX PDF file in VSCode tab", the edit window button "View LaTeX PDF file", and the shortcut (Ctrl-Alt-V or Command-Alt-V) will work and show the PDF in a new tab.
+As long as the PDF tab remains open, it will be refreshed every time the LaTeX file is rebuilt.
+
+WHen the whole book is built, the resulting PDF file ends up in the Distribution folder.
+It can still be viewed, when double clicked the message "The file is not displayed in the editor because it is either binary or uses an unsupported text encoding."
+If you click the link "Do you want to open it anyway?" it will open as binary, and then be immediately displayed using the LaTeX Workshop PDF viewer.
 
 ## Project Steps
 
@@ -149,7 +170,7 @@ These instructions assume a basic familiarity with Git.
 5. Change the name of each *01_Rename-Me* folder in *Examples*, *Resources*, and *Solutions* to match the first chapter name.
 6. In the new project folder (it should still be *Student_Files/Rename-Me*) use *git add --all* to add everything to the Git staging area (the *index*).
 7. Commit the staging area with *git commit -m "Initial commit of student file project."*.
-8. Change the name of the folder *Student_Files/Rename-Me* to the course title.
+8. Change the name of the folder *Student_Files/Rename-Me* to COURSE-NUMBER_Student_Files, e.g. NS00t03_Student_Files.
 9. Create a remote *origin* repository for the student files (probably at GitHub). The format of the project names at GitHub is always COURSE-NUMBER_Student_Files, for example https://github.com/nextstepitt/NS60603_Student_Files is the path to the student files for React Programming using TypeScript. Student file repositories are usually public and may be cloned or downloaded by anybody.
 10. Add the new *origin* remote to the project: *git remote add origin <New-Student-Files-Origin-URI>*.
 11. Push the local repository to the remote (it should have only the master branch).
@@ -253,7 +274,18 @@ The workbook is a multi-document project typeset initially to Acrobat PDF using 
 The structure of the LaTeX documents is such that you really do not need to know much about LaTeX.
 All that is really necessary is to understand where to put image files and how to use the macros that have been defined for you!
 You should simply be able to plug your content into the templates and everything will work.
-Note: $ and & are sometimes special characters in the LaTeX world; escape them by preceeding them with a backslash in your text.
+If you need more help a guide to the LaTeX typesetting system is available at https://en.wikibooks.org/wiki/LaTeX.
+ 
+Note: %, $, {, #, &, _, and } are special characters in LaTeX text and must be escaped by preceeding them with a backslash.
+These characters are not special in a code block.
+Full details about LaTeX special characters is available at https://en.wikibooks.org/wiki/LaTeX/Special_Characters.
+
+The workbook is designed to be formatted into PDF textbook or PDF slides.
+In the textbook as many topics as possible are placed on each page to save space and printing costs.
+Topics are numbered, so instead of slide pages tracking page for page refer to topic numbers.
+
+The slides are in 16:9 ratio in landscape mode.
+Slides have one topic per page; if the information does not fit on one page it is extended onto following pages.
 
 The workbook is divided into a preamble of LaTeX definitions for consistent course material, and a series of subfiles in each chapter of the book.
 The book starts with a *00_Front-Matter* chapter that contains subfiles for:
@@ -281,6 +313,7 @@ See the paragraph on [Building and Publishing](#building-and-publishing) for mor
 
 The "how to" for the workbook is broken into:
 
+* [Declarations and Titles](#Declarations-and-Titles)
 * [Sections](#Sections)
 * [section-0.tex](#section-0.tex)
 * [section-(1-n).tex](#section-(1-n).tex)
@@ -290,6 +323,27 @@ The "how to" for the workbook is broken into:
 * [Lists](#Lists)
 * [Descriptive Text](#Descriptive-Text)
 * [section-lab.tex](#section-lab.tex)
+
+### Declarations and Titles
+
+The first step is to edit the *workbook-titles.tex* file and set the book titles and images.
+These values are inserted into all the appropriate places when the book is formated:
+
+* \\bookmajortitle - the main title of the book
+* \\bookminortitle - the subtitle of the book, can be left empty
+* \\bookcoursenumber - the publisher's course number (NextStep IT Training uses the format NS99999)
+* \\bookcopyrightyears - a year or range of years for the copyright (it is just text placed in the copyright notices)
+
+There are three images that can be defined.
+Images are stored in and used from the _Images folder in the Workbook; do not provide the extension when setting the file names.
+Default files are provided for all of these, but are easily changed to your own files:
+
+* \\workbookcoverimage is an image used as the backdrop for the whole cover page of the textbook
+* \\slidecoverimage is the backdrop image used for the first slide of the slide presentation
+* \\slidebackgroundimage is the backdrop image used for all other slides
+
+The last variable is \titlealign, which defines if the title slide should have the course title at the upper left or middle right of the slide.
+This is provided because some customer formats require the uppert left, while we prefer the middle right.
 
 ### Sections
 

@@ -4,25 +4,69 @@
 % This file contains the definitions for building course material in LaTeX.
 %
 
+% Warning filters:
+%   mdframed will occasionally complain about a bad break with a code block
+%   auxhook has a known issue
+%   Sometimes the requested font in package is not available on the development system
+
+\usepackage{silence}
+\WarningFilter{mdframed}{You got a bad break}
+\WarningFilter{auxhook}{Cannot patch \document}
+\WarningFilter{Font}{Font shape}
+
+% Common packages used by the various media formats that use this preamble
+
 \usepackage[export]{adjustbox}
 \usepackage{enumitem}
 \usepackage{float}
+\usepackage[T1]{fontenc}
 \usepackage{graphics}
 \usepackage{graphicx}
-\usepackage[hidelinks]{hyperref}
+\usepackage{scrextend}
+\usepackage[T1,hyphens]{url}
+% \usepackage[hidelinks]{hyperref}
+\usepackage[bookmarksopen, bookmarksdepth=2, colorlinks=true, linkcolor=blue, urlcolor=blue]{hyperref}
+\usepackage{ifthen}
 \usepackage{listings}
-\usepackage{lstlinebgrd}
+\usepackage{lmodern}
 \usepackage{makecell}
 \usepackage{makeidx}
 \usepackage{mdframed}
-\usepackage{scrextend}
-\usepackage[T1]{fontenc}
+\usepackage{ragged2e}
+\usepackage{setspace}
 \usepackage{tabularx}
 \usepackage{textcomp}
 \usepackage{titlesec}
 \usepackage[table]{xcolor}
 
+% \usepackage{lstlinebgrd}
+% This fixes the "Numbers none unknown error" introduced in \usepackage{lsglinbgrd} in September of 2018:
+% https://tug.org/pipermail/tex-live-commits/2018-September/007278.html. This issue has not yet been fixed
+% in a new release as of this time.
+
+\makeatletter
+\let\old@lstKV@SwitchCases\lstKV@SwitchCases
+\def\lstKV@SwitchCases#1#2#3{}
+\makeatother
+\usepackage{lstlinebgrd}
+\makeatletter
+\let\lstKV@SwitchCases\old@lstKV@SwitchCases
+
+\lst@Key{numbers}{none}{%
+    \def\lst@PlaceNumber{\lst@linebgrd}%
+    \lstKV@SwitchCases{#1}%
+    {none:\\%
+     left:\def\lst@PlaceNumber{\llap{\normalfont
+                \lst@numberstyle{\thelstnumber}\kern\lst@numbersep}\lst@linebgrd}\\%
+     right:\def\lst@PlaceNumber{\rlap{\normalfont
+                \kern\linewidth \kern\lst@numbersep
+                \lst@numberstyle{\thelstnumber}}\lst@linebgrd}%
+    }{\PackageError{Listings}{Numbers #1 unknown}\@ehc}}
+\makeatother
+
 %% General global settings.
+
+\RaggedRight               % Ragged right is the default for text, taken from ragged2e which does a better job.
 
 \hbadness=99999            % Get some of the horizontal stuff that overflows the page width and wraps to shut up.
 
@@ -47,21 +91,30 @@
 %% Cover Page
 %% This is used to create the background picture for the book cover page.
 
-\newcommand{\CoverPic}{%
+\newcommand{\WorkbookCoverPic}{%
 \put(0,0){%
 \parbox[b][\paperheight]{\paperwidth}{%
 \vfill
 \centering
-\includegraphics[width=\paperwidth, height=\paperheight, keepaspectratio]{\coverimage}%
+\includegraphics[width=\paperwidth, height=\paperheight, keepaspectratio]{\workbookcoverimage}%
 \vfill
 }}}
 
-\newcommand{\BackgroundPic}{%
+\newcommand{\SlideCoverPic}{%
 \put(0,0){%
 \parbox[b][\paperheight]{\paperwidth}{%
 \vfill
 \centering
-\includegraphics[width=\paperwidth, height=\paperheight, keepaspectratio]{slide-background.jpg}%
+\includegraphics[width=\paperwidth, height=\paperheight, keepaspectratio]{\slidecoverimage}%
+\vfill
+}}}
+
+\newcommand{\SlideBackgroundPic}{%
+\put(0,0){%
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill
+\centering
+\includegraphics[width=\paperwidth, height=\paperheight, keepaspectratio]{\slidebackgroundimage}%
 \vfill
 }}}
 
@@ -69,29 +122,72 @@
 
 \newlength{\coverpagetitletopoffset}
 \newcommand{\coverimage}{}
+\newcommand{\makecovertitle}{}
+\newcommand{\titlefill}{\fill}
 
 \ifnum \paperwidth>\paperheight
     \renewcommand{\coverimage}{slide-cover.png}
-    \setlength{\coverpagetitletopoffset}{4cm}
+    \ifnum \titlealignright>0
+        \setlength{\coverpagetitletopoffset}{4cm}
+    \else
+        \setlength{\coverpagetitletopoffset}{0cm}
+        \renewcommand{\titlefill}{0pt}
+    \fi
 \else
     \renewcommand{\coverimage}{workbook-cover.png}
     \setlength{\coverpagetitletopoffset}{10cm}
 \fi
 
-\newcommand{\makecovertitle}[3]{
+\renewcommand{\makecovertitle}[3]{
     \begin{titlepage}
         \parbox{\textwidth}{
             \vspace{\coverpagetitletopoffset}
-            \hspace*{\fill}\Huge\textbf{#1}
-            \\{}\\\hspace*{\fill}\LARGE\textbf{#2}
-            \\{}\\\hspace*{\fill}\large\textbf{#3}
+            {\setstretch{2.0}
+                \hspace*{\titlefill}\Huge\textbf{#1}\break\break
+                \hspace*{\titlefill}\LARGE\textbf{#2}\break\break
+                \hspace*{\titlefill}\large\textbf{#3}\break\break
+            }
         }
     \end{titlepage}
 }
 
+% Define the command to place the title on the cover page.
+
+% \newlength{\coverpagetitletopoffset}
+% \newcommand{\coverimage}{}
+% \newcommand{\makecovertitle}{}
+
+% \ifnum \paperwidth>\paperheight
+%     \newcommand{\coverimage}{\slidecoverimage}
+%     \newcommand{\makecovertitle}[3]{
+%         \begin{titlepage}
+%             \parbox{\textwidth}{
+%                 \vspace{4cm}
+%                 \hspace*{\fill}\Huge\textbf{#1}
+%                 \\{}\\\hspace*{\fill}\LARGE\textbf{#2}
+%                 \\{}\\\hspace*{\fill}\large\textbf{#3}
+%             }
+%         \end{titlepage}
+%     }
+% \else
+%     \newcommand{\coverimage}{\workbookcoverimage}
+%     \newcommand{\makecovertitle}[3]{
+%         \begin{titlepage}
+%             \parbox{\textwidth}{
+%                 \vspace{10cm}
+%                 \hspace*{\fill}\Huge\textbf{#1}
+%                 \\{}\\\hspace*{\fill}\LARGE\textbf{#2}
+%                 \\{}\\\hspace*{\fill}\large\textbf{#3}
+%             }
+%         \end{titlepage}
+%     }
+% \fi
+
 %% Chapter and section titles.
 
-\titleformat{\chapter}[display]{\raggedleft\huge\bfseries\scshape\rmfamily}
+% Small caps are not available in the Latin Modern Roman font: http://www.tug.dk/FontCatalogue/ and https://en.wikibooks.org/wiki/LaTeX/Fonts.
+% \titleformat{\chapter}[display]{\raggedleft\huge\rmfamily\scshape\bfseries}
+\titleformat{\chapter}[display]{\raggedleft\huge\rmfamily\scshape}
 {\chaptertitlename\ \thechapter}{0pt}{}
 
 \titlespacing*{\subsection}{0pt}{7ex}{3ex}
@@ -151,7 +247,7 @@
 %% Figures.
 
 \newcommand{\figuresize}{0.9}
-\newcommand{\fig}[1]{\begin{center}\includegraphics[width=\figuresize\textwidth]{#1}\end{center}}
+\newcommand{\fig}[1]{\begin{center}\includegraphics[height=8cm,width=\figuresize\textwidth,keepaspectratio]{#1}\end{center}}
 
 % This defines an odd-ball note that could be placed at the lower right of a figure.
 
@@ -250,6 +346,14 @@
 \lstdefinelanguage{text}{
 }
 
+\lstdefinelanguage{console}[]{text}{
+    keywords=[1]{$ },
+    keywordstyle=[1]\color{blue}\bfseries
+}
+
+\lstdefinelanguage{cmd}[]{console}{}
+\lstdefinelanguage{shell}[]{console}{}
+
 %% JavaScript
 
 \lstdefinelanguage{javascript}{
@@ -340,6 +444,24 @@
 }
 
 \lstdefinelanguage{cs}[]{csharp}{}
+
+%% C++
+
+\lstdefinelanguage{cpp}[]{c++}{}
+
+%% Gherkin.
+
+\lstdefinelanguage{gherkin}{
+    keywords=[1]{ and, as, feature, given, i, in, scenario, then, when },
+    keywordstyle=[1]\color{blue}\bfseries,
+    keywords=[2]{ scenariocontext },
+    keywordstyle=[2]\color{darkgray}\bfseries,
+    identifierstyle=\color{black},
+    sensitive=false,
+    stringstyle=\color{red}\ttfamily,
+    morestring=[b]',
+    morestring=[b]"
+}
 
 %% HTML5 & CSS.
 

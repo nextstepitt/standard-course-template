@@ -1,4 +1,4 @@
-% workbook.text
+% workbook.tex
 % Copyright © 2018-2019 NextStep IT Training, a division of Smallrock Internet Services, Inc. All rights reserved.
 %
 % This is the main workbook file. It reads the preamble from workbook=def, sets up the headers and footers,
@@ -8,6 +8,7 @@
 \providecommand{\main}{.} % from https://tex.stackexchange.com/questions/289450/path-of-figures-in-different-directories-with-subfile-latex
 \providecommand{\notessubfilepath}{./_Presentation-Notes}
 \documentclass[twoside, openright, titlepage]{book}
+
 \usepackage[table]{xcolor} % This is added here because it needs to go first to get the table argument loaded, later packages don't ask for that.
 \usepackage{eso-pic}
 \usepackage[left=2.5cm, right=2.5cm, top=2.5cm, bottom=1.75cm]{geometry}
@@ -17,6 +18,7 @@
 
 % Preamble.
 
+\input{\main/workbook-titles}
 \input{\main/_Preambles/workbook-def}
 
 % Page headers and footers.
@@ -29,8 +31,8 @@
 \fancyhf{}
 \renewcommand{\sectionmark}[1]{\markright{#1}}
 \renewcommand{\subsectionmark}[1]{\markright{#1}}
-\fancyhead[LE]{\thepage\hspace{2em}\textsc{\nouppercase{\leftmark}}}
-\fancyhead[RO]{\textsc{\nouppercase{\rightmark}}\hspace{2em}\thepage}
+\fancyhead[LE]{\thepage\hspace{2em}\rmfamily\textsc{\nouppercase{\leftmark}}}
+\fancyhead[RO]{\rmfamily\textsc{\nouppercase{\rightmark}}\hspace{2em}\thepage}
 
 % Run the document.
 
@@ -39,8 +41,8 @@
     % Define the cover page and title.
 
     \pagenumbering{roman}
-    \AddToShipoutPicture*{\CoverPic}
-    \makecovertitle{[Book Title]}{[sub-title if any]}{[book number]}
+    \AddToShipoutPicture*{\WorkbookCoverPic}
+    \makecovertitle{\bookmajortitle}{\bookminortitle}{\bookcoursenumber}
 
     % Front matter (adjust which files are included as necessary)
 
@@ -71,5 +73,9 @@
 
     \subfile{\main/_Presentation-Notes/presentation-notes}
     \subfile{\main/_Presentation-Notes/change-log}
+
+    % Index
+
+    \printindex
 
 \end{document}
