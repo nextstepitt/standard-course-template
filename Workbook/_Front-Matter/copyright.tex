@@ -8,6 +8,16 @@
 
 \begin{document}
 
+% Local macros
+
+\newcommand{\teamMember}[1]{%
+    \textbf{#1}
+}
+
+\newcommand{\teamMemberTitle}[1]{%
+    #1
+}
+
 %% Course title and description, read from workbook-titles.tex
 
 \section*{\bookcoursenumber{} \bookmajortitle}
@@ -72,9 +82,17 @@
         This limitation of liability shall apply to any claim or cause whatsoever whether such claim or cause arises in contract, tort or otherwise.
     }
 
-    \par{
-        \textbf{COURSE TEMPLATE}
-    }
+    \begin{tabbing}
+        \textbf{PROJECT TEAM}\\
+        \\
+        \teamMember{[Insert team member]} \hspace{1cm} \= \teamMemberTitle{Course Director} \\ % Modify the horizontal space after the first name to set a good tab stop that works for all the names.
+        \teamMember{[Insert team member]} \> \teamMemberTitle{Author} \\
+        \teamMember{[Insert team member]} \> \teamMemberTitle{Editor} \\
+        \teamMember{[Insert team member]} \> \teamMemberTitle{Technical Editor} \\
+        \teamMember{[Insert team member]} \> \teamMemberTitle{Content Reviewer} \\
+    \end{tabbing}
+
+    \textbf{COURSE TEMPLATE}
 
     \par{
         This book was created from the \textbf{Standard Course Template}.
@@ -84,24 +102,13 @@
     }
 }
 
-% <!--
-% ### Project Team
-% <div class="project-team">
-%     <span class="team-member">Joel Mussman</span><span class="team-member-title">Course Director</span><br/>
-%     <span class="team-member">Joel Mussman</span><span class="team-member-title">Author</span><br/>
-%     <span class="team-member">&nbsp;</span><span class="team-member-title">Editor</span><br/>
-%     <span class="team-member">&nbsp;</span><span class="team-member-title">Technical Editor</span><br/>
-%     <span class="team-member">&nbsp;</span><span class="team-member-title">Content Reviewer</span><br/>
-% </div>
-% -->
-
 \parbox{\textwidth}{
     
     \vspace{2em}
     \small
     \raggedright
 
-    \includegraphics[width=0.33\textwidth]{nsbanner.png}\\
+    \includegraphics[width=0.33\textwidth]{_Workbook/nsbanner}\\
     999 Ponce de Leon Boulevard, Suite 830\\
     Coral Gables, FL 33134\\
     786-347-3155 / 800-418-0811\\
@@ -138,8 +145,9 @@
 %     \resizebox{\textwidth}{!}{
 %     \hspace*{0pt}\begin{minipage}{\textwidth}
 %     \def\arraystretch{1.5}
-%     \begin{tabularx}{\textwidth}{l|l}
-%     \makecell[tl]{nTier Training, LLC \\ 3822 Tynemoore Walk SE \\ Symrna, GA 30080} & \makecell[tl]{The Judge Group, INC \\ 151 South Warner Rd. \\ Suite 100 \\ Wayne, PA 19087} \\
+%     \begin{tabularx}{\textwidth}{l|l} % Add more "l"s if you need more columns
+%     % One "makecell" per column on the previous line. Add more lines to fill columns vertically.
+%     \makecell[tl]{Wonderful Widgets \\ 1 Main Street \\ Somewhere, PA 99999} & \makecell[tl]{Pirates R Us \\ 1 Kings Highway \\ Port Royal, Jamiaca} \\
 %     \end{tabularx}
 %     \end{minipage}
 %     }

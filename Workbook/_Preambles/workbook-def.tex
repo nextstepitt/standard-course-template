@@ -126,7 +126,7 @@
 \newcommand{\titlefill}{\fill}
 
 \ifnum \paperwidth>\paperheight
-    \renewcommand{\coverimage}{slide-cover.png}
+    \renewcommand{\coverimage}{\slidecoverimage}
     \ifnum \titlealignright>0
         \setlength{\coverpagetitletopoffset}{4cm}
     \else
@@ -134,7 +134,7 @@
         \renewcommand{\titlefill}{0pt}
     \fi
 \else
-    \renewcommand{\coverimage}{workbook-cover.png}
+    \renewcommand{\coverimage}{\workbookcoverimage}
     \setlength{\coverpagetitletopoffset}{10cm}
 \fi
 
@@ -150,38 +150,6 @@
         }
     \end{titlepage}
 }
-
-% Define the command to place the title on the cover page.
-
-% \newlength{\coverpagetitletopoffset}
-% \newcommand{\coverimage}{}
-% \newcommand{\makecovertitle}{}
-
-% \ifnum \paperwidth>\paperheight
-%     \newcommand{\coverimage}{\slidecoverimage}
-%     \newcommand{\makecovertitle}[3]{
-%         \begin{titlepage}
-%             \parbox{\textwidth}{
-%                 \vspace{4cm}
-%                 \hspace*{\fill}\Huge\textbf{#1}
-%                 \\{}\\\hspace*{\fill}\LARGE\textbf{#2}
-%                 \\{}\\\hspace*{\fill}\large\textbf{#3}
-%             }
-%         \end{titlepage}
-%     }
-% \else
-%     \newcommand{\coverimage}{\workbookcoverimage}
-%     \newcommand{\makecovertitle}[3]{
-%         \begin{titlepage}
-%             \parbox{\textwidth}{
-%                 \vspace{10cm}
-%                 \hspace*{\fill}\Huge\textbf{#1}
-%                 \\{}\\\hspace*{\fill}\LARGE\textbf{#2}
-%                 \\{}\\\hspace*{\fill}\large\textbf{#3}
-%             }
-%         \end{titlepage}
-%     }
-% \fi
 
 %% Chapter and section titles.
 
@@ -220,7 +188,6 @@
     
 \newcommand{\sectiontitle}[1]{#1 \\}
 \newcommand{\sectiontitleselected}[1]{\textbf{#1} \\}
-
 
 %% Bullet lists (for outline chapters). The new command is to adjust the spacing
 %% after the bullet items. Use \item inside the bulletlist argument.

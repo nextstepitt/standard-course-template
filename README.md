@@ -30,9 +30,6 @@
 
 ## Introduction
 
-**New**: The *workbook-titles.tex* file consilidates the titles and images for formatting the document into one configuration!
-See the new step [Declarations and Titles](#Declarations-and-Titles) in the section [Working with the Workbook](#working-with-the-workbook).
-
 This course template provides standard structure and technology for managing and dstribution courseware.
 The three areas of focus are written material, participant files, and video presentations.
 
@@ -42,11 +39,12 @@ But in fact, the structure of these LaTeX documents is such that you really do n
 
 All that is really necessary is to understand where to put image files and how to use the macros that have been defined for you.
 You should simply be able to plug your content into the templates and everything will work.
-Note: $, _, and & are sometimes special characters in the LaTeX world; you may need to "escape" them by putting a backslash in front of them in your text.
+Note: #, $, %, &, _, {, and } are usually special characters in the LaTeX world; you may need to "escape" them by putting a backslash in front of them in your text.
+Several other characters cannot be escaped with a backslash: for ^ use \\^{} or \\textasciicircum{}, for ~ use \\textasciitilde, and for \\ use \textbackslash{}.
 
 So, it really is not any more difficult to use for this template than HTML, XML, or Markdown.
 In fact, it is much simpler, you just have to learn our handful of macros, and a couple of LaTeX things like:
-wrap text with *\textbf{...}* for bold characters, and *\textit{...}* for italics (replace the elipses with your text).
+wrap text with *\textbf{...}* for bold characters, and *\textit{...}* for italics, or better yet *\emph{...}* for emphasis/italics (replace the elipses with your text).
 The rest of what you need to know comes below.
 
 And, best of all, it is definiately faster than trying to fight with a WYSIWIG editor (but you can use one for LaTeX if you want to)!
@@ -278,14 +276,7 @@ If you need more help a guide to the LaTeX typesetting system is available at ht
  
 Note: %, $, {, #, &, _, and } are special characters in LaTeX text and must be escaped by preceeding them with a backslash.
 These characters are not special in a code block.
-Full details about LaTeX special characters is available at https://en.wikibooks.org/wiki/LaTeX/Special_Characters.
-
-The workbook is designed to be formatted into PDF textbook or PDF slides.
-In the textbook as many topics as possible are placed on each page to save space and printing costs.
-Topics are numbered, so instead of slide pages tracking page for page refer to topic numbers.
-
-The slides are in 16:9 ratio in landscape mode.
-Slides have one topic per page; if the information does not fit on one page it is extended onto following pages.
+Full details about LaTeX special characters is available at https://en.wikibooks.org/wiki/LaTeX/Special_Characters. 
 
 The workbook is divided into a preamble of LaTeX definitions for consistent course material, and a series of subfiles in each chapter of the book.
 The book starts with a *00_Front-Matter* chapter that contains subfiles for:
@@ -313,7 +304,6 @@ See the paragraph on [Building and Publishing](#building-and-publishing) for mor
 
 The "how to" for the workbook is broken into:
 
-* [Declarations and Titles](#Declarations-and-Titles)
 * [Sections](#Sections)
 * [section-0.tex](#section-0.tex)
 * [section-(1-n).tex](#section-(1-n).tex)
@@ -323,27 +313,6 @@ The "how to" for the workbook is broken into:
 * [Lists](#Lists)
 * [Descriptive Text](#Descriptive-Text)
 * [section-lab.tex](#section-lab.tex)
-
-### Declarations and Titles
-
-The first step is to edit the *workbook-titles.tex* file and set the book titles and images.
-These values are inserted into all the appropriate places when the book is formated:
-
-* \\bookmajortitle - the main title of the book
-* \\bookminortitle - the subtitle of the book, can be left empty
-* \\bookcoursenumber - the publisher's course number (NextStep IT Training uses the format NS99999)
-* \\bookcopyrightyears - a year or range of years for the copyright (it is just text placed in the copyright notices)
-
-There are three images that can be defined.
-Images are stored in and used from the _Images folder in the Workbook; do not provide the extension when setting the file names.
-Default files are provided for all of these, but are easily changed to your own files:
-
-* \\workbookcoverimage is an image used as the backdrop for the whole cover page of the textbook
-* \\slidecoverimage is the backdrop image used for the first slide of the slide presentation
-* \\slidebackgroundimage is the backdrop image used for all other slides
-
-The last variable is \titlealign, which defines if the title slide should have the course title at the upper left or middle right of the slide.
-This is provided because some customer formats require the uppert left, while we prefer the middle right.
 
 ### Sections
 
@@ -433,7 +402,7 @@ Follow the template to set up the content of the sections:
 ```
 
 A topic figure can be inserted using the *\fig* macro, where the argument is the name of the image.
-Images are located realtive to the \graphicspath defined in each LaTeX file; this is set up in the template to point to the *Workbook/_Images*
+Images are located relative to the \graphicspath defined in each LaTeX file; this is set up in the template to point to the *Workbook/_Images*
 regardless if LaTeX is compiling the whole book or an individual section file so leave it alone and put the images in *_Images*.
 
 Image names do not include the file extension, LaTeX will figure out the right image just from the name.
