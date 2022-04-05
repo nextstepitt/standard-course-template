@@ -85,15 +85,22 @@ Visit this page at the official Latex Project for details about how to install t
 On MacOS MacTex the simple way to install LaTeX is through Homebrew:
 
 ```text
-$ brew tap caskroom/cask
-$ brew cask install mactex
+$ brew tap homebrew/cask
+$ brew install mactex --cask
 ```
+
+The executable files for LaTeX should be installed to /usr/local/texlive/2021/bin.
+This file needs to be in the environment PATH variable ahead of any other TeX installed on
+the computer.
 
 ### Windows
 
-On Microsoft Windows this template has been tested with the TeX Live distribution, found at https://www.tug.org/texlive/. However, we have found that the network install of TeX Live 2018 does not seem to be complete, and we have only been successful using a full install from an ISO download. We last tested this with the *textlive2018-20180414.iso* downloaded from http://mirrors.rit.edu/CTAN/systems/texlive/Images/texlive2018-20180414.iso. 
-
-### Linux
+On Microsoft Windows this template has been tested with the TeX Live distribution, found
+at https://www.tug.org/texlive/.
+However, we have found that the network install of TeX Live 2018 does not seem to be complete,
+and we have only been successful using a full install from an ISO download.
+We last tested this with the *textlive2018-20180414.iso* downloaded from
+http://mirrors.rit.edu/CTAN/systems/texlive/Images/texlive2018-20180414.iso. 
 
 ## Using Visual Studio Code
 
@@ -102,9 +109,19 @@ VSCode was used to build this template project.
 You may want to add the "LaTeX Workshop" extension by James Yu, it helps with compiling the source files and has a built-in PDF previewer.
 You may also want the "Spelling Checker (RU, EN)" extension by Julia to help avoid gramatical and spelling errors.
 
-When you use VSCode and the LaTeX Workshop, in the settings for LaTeX Workshop you must add an output-directory for building the LaTeX sources.
-Look for the settings in the Visual Studio Code preferences.
-The folder name is *./.latex-temp*, and the path is relative to the folder where the .tex source file is located:
+The structure of the workbook uses subfolders, so LaTeX Workshop must be configured for
+the subfolders.
+The tools settings need to be included in the VS Code JSON settings manually.
+Open VS Code settings and search for *latex-workshop.tools*.
+Click the link to *Edit in settings.json* to open the JSON settings document, and then add
+the following JSON text.
+
+The two settings that are added to the default settings here are the
+*-output-directory* to isolate each subfolder work, and the *-cd*
+option to make *latexmk* work in the subfolder instead of the main folder.
+The output folder name is *./.latex-temp*.
+*latexmk* will create the folder relative to each subfolder (and the main folder) when
+it builds the document parts.
 
 ```json
 "latex-workshop.latex.tools": [
@@ -117,6 +134,7 @@ The folder name is *./.latex-temp*, and the path is relative to the folder where
         "-file-line-error",
         "-pdf",
         "-output-directory=./.latex-temp",
+		"-cd",
         "%DOC%"
         ]
     },
@@ -128,6 +146,7 @@ The folder name is *./.latex-temp*, and the path is relative to the folder where
         "-interaction=nonstopmode",
         "-file-line-error",
         "-output-directory=./.latex-temp",
+		"-cd",
         "%DOC%"
         ]
     },
