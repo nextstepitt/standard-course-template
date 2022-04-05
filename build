@@ -1,6 +1,6 @@
 #!/bin/bash
 # build.sh
-# Copyright © 2018-2019 NextStep IT Training, a division of Smallrock Internet Services, Inc. All rights reserved.
+# Copyright © 2018-2022 NextStep IT Training, a division of Smallrock Internet Services, Inc. All rights reserved.
 #
 # Build workbook, slides, and outline and copy the PDFs to the Distribution folder. Build clean will remove the
 # latex temporary folders and the pdfs from the Distribution folder.
